@@ -1,0 +1,5 @@
+#compdef knex
+local -a options arguments 
+options=('-h:help' '--help:help' '-V:version' '--version:version' '--debug: Run with debugging' '--knexfile:Specify a knexfile' '--cwd:specify working directory' '--env:environment, default process.env.NODE_ENV || development')
+arguments=('init:Initialize fresh knexfile' 'migrate\:latest:migrate to latest' 'migrate\:make:Create named migration file' 'migrate\:rollback:Rollback last set' 'migrate\:currentVersion:View current version' 'seed\:make:Create named make' 'seed\:run:runs seed file')
+_describe 'values' options -- arguments
