@@ -40,5 +40,8 @@ antigen apply
 
 
 BULLETTRAIN_GIT_COLORIZE_DIRTY=true
+BULLETTRAIN_RUBY_SHOW=false
 
 
+
+source ~/.profile
