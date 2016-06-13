@@ -42,15 +42,7 @@ elif [[ $CURRENT_OS == 'Cygwin' ]]; then
     antigen bundle cygwin
 fi
 
-
-antigen apply
-
-
-BULLETTRAIN_GIT_COLORIZE_DIRTY=true
-BULLETTRAIN_RUBY_SHOW=false
-BULLETTRAIN_IS_SSH_CLIENT=true
-
-
+POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 
 source ~/.profile
 
@@ -69,3 +61,6 @@ PERL_MM_OPT="INSTALL_BASE=/Users/tcn/perl5"; export PERL_MM_OPT;
 
 unsetopt inc_append_history
 unsetopt share_history
+
+antigen theme bhilburn/powerlevel9k powerlevel9k
+antigen apply
