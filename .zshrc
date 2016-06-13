@@ -9,7 +9,6 @@ fpath=(/usr/local/share/zsh-completions $fpath)
 
 source ~/.marushell/antigen.zsh
 antigen use oh-my-zsh
-antigen theme https://github.com/caiogondim/bullet-train-oh-my-zsh-theme bullet-train
 antigen bundles << EOBUNDLES
   thefuck
   git
@@ -61,4 +60,12 @@ export NVM_DIR="/Users/marudor/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
 # OPAM configuration
-. /Users/marudor/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+PATH="/Users/tcn/perl5/bin${PATH:+:${PATH}}"; export PATH;
+PERL5LIB="/Users/tcn/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
+PERL_LOCAL_LIB_ROOT="/Users/tcn/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
+PERL_MB_OPT="--install_base \"/Users/tcn/perl5\""; export PERL_MB_OPT;
+PERL_MM_OPT="INSTALL_BASE=/Users/tcn/perl5"; export PERL_MM_OPT;
+
+
+unsetopt inc_append_history
+unsetopt share_history
