@@ -1,0 +1,4 @@
+POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir rbenv nodeenv virtualenv vcs)
+DEFAULT_USER=marudor
+

@@ -42,8 +42,7 @@ elif [[ $CURRENT_OS == 'Cygwin' ]]; then
     antigen bundle cygwin
 fi
 
-POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-
+source ./$(readlink ./.zshrc | sed s/.zshrc/themeConfig/)
 source ~/.profile
 
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
