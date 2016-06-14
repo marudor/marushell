@@ -42,12 +42,12 @@ elif [[ $CURRENT_OS == 'Cygwin' ]]; then
     antigen bundle cygwin
 fi
 
-source ./$(readlink ./.zshrc | sed s/.zshrc/themeConfig/)
+source ~/.marushell/themeConfig
 source ~/.profile
 
 export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 
-export NVM_DIR="/Users/marudor/.nvm"
+export NVM_DIR="/Users/$(whoami)/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 
 # OPAM configuration
