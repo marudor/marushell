@@ -10,7 +10,6 @@ fpath=(/usr/local/share/zsh-completions $fpath)
 source ~/.marushell/antigen.zsh
 antigen use oh-my-zsh
 antigen bundles << EOBUNDLES
-  thefuck
   git
   zsh-users/zsh-syntax-highlighting
   command-not-found
@@ -26,6 +25,11 @@ antigen bundles << EOBUNDLES
   zsh-users/zsh-autosuggestions
   zsh-users/zsh-completions
 EOBUNDLES
+
+if type "fuck" >/dev/null 2>/dev/null;
+then
+    antigen bundle fuck
+fi
 
 AUTOENV_FILE_ENTER=.env
 
