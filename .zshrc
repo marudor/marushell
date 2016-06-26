@@ -28,7 +28,7 @@ EOBUNDLES
 
 if type "fuck" >/dev/null 2>/dev/null;
 then
-    antigen bundle fuck
+    antigen bundle thefuck
 fi
 
 AUTOENV_FILE_ENTER=.env
