@@ -1,7 +1,7 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
-set rtp+=~/.vim/Vundle.vim
+set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 
@@ -39,7 +39,6 @@ filetype plugin indent on    " required
 syntax on
 set laststatus=2
 set history=1000
-set backup
 set cursorline
 set linespace=0
 set backspace=indent,eol,start
