@@ -12,6 +12,9 @@ source $HOME/.zgen/zgen.zsh
 
 if ! zgen saved; then
   zgen oh-my-zsh lib/completion.zsh
+  zgen oh-my-zsh lib/directories.zsh
+  zgen oh-my-zsh lib/theme-and-appearance.zsh
+  zgen oh-my-zsh plugins/sudo
   zgen load bhilburn/powerlevel9k powerlevel9k
   zgen load horosgrisa/autoenv
   zgen load caarlos0/zsh-pg
@@ -49,8 +52,6 @@ function brewCommandNotFound() {
 if [[ -f "$HOME/.opam/opam-init/init.zsh" ]]; then
   source "$HOME/.opam/opam-init/init.zsh"
 fi
-
-alias ls="ls -G"
 
 source $HOME/.profile
 
