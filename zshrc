@@ -29,8 +29,12 @@ lazy_source () {
 }
 
 
+NVM_DIR=$HOME/.nvm
 if [[ -f "$NVM_DIR/nvm.sh" ]]; then
   source "$NVM_DIR/nvm.sh" --no-use
+  LASTVERSION=$(nvm_ls | tail -1)
+  NVMBASEPATH=$(nvm_version_dir)
+  export PATH=$PATH:$NVMBASEPATH/$LASTVERSION/bin
 fi
 
 function brewCommandNotFound() {
@@ -45,6 +49,8 @@ function brewCommandNotFound() {
 if [[ -f "$HOME/.opam/opam-init/init.zsh" ]]; then
   source "$HOME/.opam/opam-init/init.zsh"
 fi
+
+alias ls="ls -G"
 
 source $HOME/.profile
 
