@@ -48,8 +48,6 @@ set ignorecase
 set smartcase
 set wildmenu
 set foldenable
-set list
-set listchars=tab:›\ ,trail:•,extends:#,nbsp:. " Highlight problematic whitespace"
 set vb
 set autoindent
 set shiftwidth=2
