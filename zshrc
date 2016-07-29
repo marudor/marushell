@@ -49,6 +49,10 @@ function brewCommandNotFound() {
   fi
 }
 
+if type brew > /dev/null; then
+  zgen load vasyharan/zsh-brew-services
+fi
+
 if [[ -f "$HOME/.opam/opam-init/init.zsh" ]]; then
   source "$HOME/.opam/opam-init/init.zsh"
 fi
