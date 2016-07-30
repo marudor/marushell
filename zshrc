@@ -3,7 +3,23 @@ export LC_ALL=en_GB.UTF-8
 
 unsetopt sharehistory
 unsetopt share_history
-setopt inc_append_history
+setopt INC_APPEND_HISTORY
+setopt HIST_IGNORE_DUPS
+setopt HIST_REDUCE_BLANKS
+setopt PROMPT_SUBST
+unsetopt MENU_COMPLETE
+setopt AUTO_MENU
+setopt COMPLETE_IN_WORD 
+setopt ALWAYS_TO_END
+
+export GREP_OPTIONS='--color=auto'
+export GREP_COLOR='3;33'
+export PAGER='most'
+export EDITOR='vim'
+
+if [[ -f "$HOME/.gh_api_token" ]]; then
+  export HOMEBREW_GITHUB_API_TOKEN=$(cat ~/.gh_api_token)
+fi
 
 source $HOME/.marushell/themeConfig
 
@@ -11,6 +27,7 @@ source $HOME/.zgen/zgen.zsh
 
 
 if ! zgen saved; then
+  zgen oh-my-zsh lib/key-bindings.zsh
   zgen oh-my-zsh lib/completion.zsh
   zgen oh-my-zsh lib/directories.zsh
   zgen oh-my-zsh lib/theme-and-appearance.zsh
@@ -58,5 +75,11 @@ if [[ -f "$HOME/.opam/opam-init/init.zsh" ]]; then
 fi
 
 source $HOME/.profile
+
+bindkey -e
+bindkey "^[[H" beginning-of-line    #fn-left
+bindkey "^[[F" end-of-line          #fn-right
+bindkey "^[[1;2D" backward-word      #alt-left
+bindkey "^[[1;2C" forward-word       #alt-right
 
 unsetopt BEEP
