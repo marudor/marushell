@@ -1,16 +1,30 @@
 export LANG=en_GB.UTF-8
 export LC_ALL=en_GB.UTF-8
 
-unsetopt sharehistory
-unsetopt share_history
-setopt INC_APPEND_HISTORY
-setopt HIST_IGNORE_DUPS
 setopt HIST_REDUCE_BLANKS
 setopt PROMPT_SUBST
 unsetopt MENU_COMPLETE
 setopt AUTO_MENU
 setopt COMPLETE_IN_WORD 
 setopt ALWAYS_TO_END
+setopt append_history
+setopt extended_history
+setopt hist_expire_dups_first
+setopt hist_ignore_dups
+setopt hist_ignore_space
+setopt hist_verify
+setopt inc_append_history
+setopt share_history
+
+if [ -z "$HISTFILE" ]; then
+  if [ ! -d $HOME/.history ]; then
+    mkdir $HOME/.history
+  fi
+  HISTFILE=$HOME/.history/.zsh_history_`basename tty`
+fi
+
+HISTSIZE=10000
+SAVEHIST=10000
 
 export GREP_OPTIONS='--color=auto'
 export GREP_COLOR='3;33'
@@ -79,7 +93,9 @@ source $HOME/.profile
 bindkey -e
 bindkey "^[[H" beginning-of-line    #fn-left
 bindkey "^[[F" end-of-line          #fn-right
-bindkey "^[[1;2D" backward-word      #alt-left
-bindkey "^[[1;2C" forward-word       #alt-right
+bindkey "^[[1;2D" backward-word      #shift-left
+bindkey "^[[1;2C" forward-word       #shift-right
+
+ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=reset-prompt
 
 unsetopt BEEP
