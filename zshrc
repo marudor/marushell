@@ -45,6 +45,7 @@ if ! zgen saved; then
   zgen oh-my-zsh lib/completion.zsh
   zgen oh-my-zsh lib/directories.zsh
   zgen oh-my-zsh lib/theme-and-appearance.zsh
+  zgen oh-my-zsh lib/termsupport.zsh
   zgen oh-my-zsh plugins/sudo
   zgen load bhilburn/powerlevel9k powerlevel9k
   zgen load horosgrisa/autoenv
@@ -69,6 +70,10 @@ if [[ -f "$NVM_DIR/nvm.sh" ]]; then
   LASTVERSION=$(nvm_ls | tail -1)
   NVMBASEPATH=$(nvm_version_dir)
   export PATH=$PATH:$NVMBASEPATH/$LASTVERSION/bin
+fi
+
+if type hub > /dev/null; then
+  alias git="hub"
 fi
 
 function brewCommandNotFound() {
