@@ -104,3 +104,5 @@ bindkey "^[[1;2C" forward-word       #shift-right
 ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=reset-prompt
 
 unsetopt BEEP
+
+alias ducks='du -cks * | sort -rn | head'
