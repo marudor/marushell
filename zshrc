@@ -26,7 +26,7 @@ fi
 HISTSIZE=10000
 SAVEHIST=10000
 
-export GREP_OPTIONS='--color=auto'
+alias grep='grep --color'
 export GREP_COLOR='3;33'
 export PAGER='most'
 export EDITOR='vim'
