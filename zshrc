@@ -94,7 +94,9 @@ if [[ -f "$HOME/.opam/opam-init/init.zsh" ]]; then
   source "$HOME/.opam/opam-init/init.zsh"
 fi
 
-source $HOME/.profile
+if [[ -f "$HOME/.profile" ]] then
+  source "$HOME/.profile"
+fi
 
 bindkey -e
 bindkey "^[[H" beginning-of-line    #fn-left
