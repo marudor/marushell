@@ -109,3 +109,8 @@ ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=reset-prompt
 unsetopt BEEP
 
 alias ducks='du -cks * | sort -rn | head'
+
+YARN_DIR="$HOME/.yarn"
+if [[ -f "$YARN_DIR/bin/yarn" ]]; then
+  export PATH="$YARN_DIR/bin:$PATH"
+fi
