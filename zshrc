@@ -57,6 +57,7 @@ if ! zgen saved; then
   zgen load zsh-users/zsh-autosuggestions
   zgen load zsh-users/zsh-syntax-highlighting
 
+
   zgen save
 fi
 
@@ -115,12 +116,20 @@ if [[ -f "$YARN_DIR/bin/yarn" ]]; then
   export PATH="$YARN_DIR/bin:$PATH"
 fi
 
+source $HOME/.marushell/autocomplete/_yarn
+
 updateNode() {
   if [[ -z $1 ]]; then
     echo Please enter desired node version
   else
     nvm use $1
     x=`npm ls -g --depth 0 | awk '{print $2}'`
+    echo $x | while read l; do
+      p=`echo $l | awk '{split($1,array,"@")} END{if(array[1]!="npm") print array[1]}'`
+      if [[ $p ]]; then
+        yarn global remove $p
+      fi
+    done
     nvm i $1
 
     echo $x | while read l; do
