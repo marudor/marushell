@@ -29,7 +29,10 @@ SAVEHIST=10000
 
 alias grep='grep --color'
 export GREP_COLOR='3;33'
-export PAGER='most'
+if type most > /dev/null; then
+  export PAGER='most'
+fi
+
 export EDITOR='vim'
 
 if [[ -f "$HOME/.gh_api_token" ]]; then
@@ -118,25 +121,22 @@ fi
 
 source $HOME/.marushell/autocomplete/_yarn
 
-updateNode() {
-  if [[ -z $1 ]]; then
-    echo Please enter desired node version
-  else
-    nvm use $1
-    x=`npm ls -g --depth 0 | awk '{print $2}'`
-    echo $x | while read l; do
-      p=`echo $l | awk '{split($1,array,"@")} END{if(array[1]!="npm") print array[1]}'`
-      if [[ $p ]]; then
-        yarn global remove $p
-      fi
-    done
-    nvm i $1
+[ -f $HOME/.travis/travis.sh ] && source $HOME/.travis/travis.sh
+if [[ -f $HOME/.nix-profile/etc/profile.d/nix.sh ]]; then
+  source $HOME/.nix-profile/etc/profile.d/nix.sh
+  nix?() {
+    nix-env -qa \* -P | fgrep -i "$1"; 
+  }
+  export CPATH=$HOME/.nix-profile/include
+  export LIBRARY_PATH=$HOME/.nix-profile/lib
+  export CPPFLAGS="-I$HOME/.nix-profile/include"
+  export CXXFLAGS="-I$HOME/.nix-profile/include"
+  export CFLAGS="-I$HOME/.nix-profile/include"
+  export LDFLAGS="-L$HOME/.nix-profile/lib"
+fi
 
-    echo $x | while read l; do
-      p=`echo $l | awk '{split($1,array,"@")} END{if(array[1]!="npm") print array[1]}'`
-      if [[ $p ]]; then
-        yarn global add $p
-      fi
-    done
-  fi
-}
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  alias service=$HOME/.marushell/service.sh
+fi
+
+
