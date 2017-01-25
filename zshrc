@@ -81,6 +81,20 @@ if type hub > /dev/null; then
   alias git="hub"
 fi
 
+if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
+  source $HOME/.nix-profile/etc/profile.d/nix.sh; 
+fi
+
+if type nix-env > /dev/null; then
+  nixUpdate() { nix-env -u --keep-going --leq }
+  nix?(){ nix-env -qa \* -P | fgrep -i "$1"; }
+
+  export CPATH=$HOME/.nix-profile/include
+  export LIBRARY_PATH=$HOME/.nix-profile/lib
+  export CPPFLAGS='-I$HOME/.nix-profile/include'
+  export LDFLAGS='-L$HOME/.nix-profile/lib'
+fi
+
 function brewCommandNotFound() {
   if type brew > /dev/null; then
     if ! brew command command-not-found-init > /dev/null; then
