@@ -69,13 +69,16 @@ lazy_source () {
 }
 
 
-NVM_DIR=$HOME/.nvm
-if [[ -f "$NVM_DIR/nvm.sh" ]]; then
-  source "$NVM_DIR/nvm.sh" --no-use
-  LASTVERSION=$(nvm_ls | tail -1)
-  NVMBASEPATH=$(nvm_version_dir)
-  export PATH=$PATH:$NVMBASEPATH/$LASTVERSION/bin
-fi
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
+
+#NVM_DIR=$HOME/.nvm
+#if [[ -f "$NVM_DIR/nvm.sh" ]]; then
+#  source "$NVM_DIR/nvm.sh" --no-use
+#  LASTVERSION=$(nvm_ls | tail -1)
+#  NVMBASEPATH=$(nvm_version_dir)
+#  export PATH=$PATH:$NVMBASEPATH/$LASTVERSION/bin
+#fi
 
 if type hub > /dev/null; then
   alias git="hub"
@@ -154,3 +157,5 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 fi
 
 
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
