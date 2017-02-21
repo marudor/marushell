@@ -70,15 +70,12 @@ lazy_source () {
 
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" # This loads nvm
-
-#NVM_DIR=$HOME/.nvm
-#if [[ -f "$NVM_DIR/nvm.sh" ]]; then
-#  source "$NVM_DIR/nvm.sh" --no-use
-#  LASTVERSION=$(nvm_ls | tail -1)
-#  NVMBASEPATH=$(nvm_version_dir)
-#  export PATH=$PATH:$NVMBASEPATH/$LASTVERSION/bin
-#fi
+if [[ -f "$NVM_DIR/nvm.sh" ]]; then
+  source "$NVM_DIR/nvm.sh" --no-use
+  LASTVERSION=$(nvm_ls | tail -1)
+  NVMBASEPATH=$(nvm_version_dir)
+  export PATH=$PATH:$NVMBASEPATH/$LASTVERSION/bin
+fi
 
 if type hub > /dev/null; then
   alias git="hub"
@@ -159,3 +156,7 @@ fi
 
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+# tabtab source for electron-forge package
+# uninstall by removing these lines or running `tabtab uninstall electron-forge`
+[[ -f /Users/tcn/.nvm/versions/node/v7.5.0/lib/node_modules/electron-forge/node_modules/tabtab/.completions/electron-forge.zsh ]] && . /Users/tcn/.nvm/versions/node/v7.5.0/lib/node_modules/electron-forge/node_modules/tabtab/.completions/electron-forge.zsh
