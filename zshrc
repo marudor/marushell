@@ -153,10 +153,16 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
   alias service=$HOME/.marushell/service.sh
 fi
 
-
+export PATH=$PATH:$HOME/.marushell/bin
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 # tabtab source for electron-forge package
 # uninstall by removing these lines or running `tabtab uninstall electron-forge`
 [[ -f /Users/tcn/.nvm/versions/node/v7.5.0/lib/node_modules/electron-forge/node_modules/tabtab/.completions/electron-forge.zsh ]] && . /Users/tcn/.nvm/versions/node/v7.5.0/lib/node_modules/electron-forge/node_modules/tabtab/.completions/electron-forge.zsh
+
+# added by travis gem
+[ -f /Users/marudor/.travis/travis.sh ] && source /Users/marudor/.travis/travis.sh
+
+export NVS_HOME="$HOME/.nvs"
+[ -s "$NVS_HOME/nvs.sh" ] && . "$NVS_HOME/nvs.sh"
