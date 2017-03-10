@@ -6,11 +6,16 @@ call vundle#begin()
 
 
 Plugin 'VundleVim/Vundle.vim'
-Plugin 'vim-airline/vim-airline'
+Plugin 'easymotion/vim-easymotion'
+Plugin 'itchyny/lightline.vim'
+Plugin 'kchmck/vim-coffee-script'
+Plugin 'groenewege/vim-less'
+Plugin 'digitaltoad/vim-pug'
+Plugin 'hail2u/vim-css3-syntax'
 Plugin 'tpope/vim-fugitive'
-Plugin 'scrooloose/syntastic'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'pangloss/vim-javascript'
+Plugin 'mxw/vim-jsx'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'tomasr/molokai'
@@ -21,11 +26,20 @@ Plugin 'tpope/vim-markdown'
 Plugin 'othree/html5.vim'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'ConradIrwin/vim-bracketed-paste'
+if v:version < 800
+  Plugin 'vim-syntastic/syntastic'
+else
+  Plugin 'w0rp/ale'
+endif
+Plugin 'editorconfig/editorconfig-vim'
 
 
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
+
+let g:javascript_plugin_flow = 1
+let g:jsx_ext_required = 0
 
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
