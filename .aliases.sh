@@ -11,7 +11,7 @@ alias rm='rm -i -v'
 alias cp='cp -v'
 
 
-if type gls > /dev/null; then
+if type gls > /dev/null 2>&1; then
   alias ls='gls -AFh --color --group-directories-first'
 else
   alias ls='ls -AFhC'
