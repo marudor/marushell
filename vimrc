@@ -7,7 +7,7 @@ call vundle#begin()
 
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'easymotion/vim-easymotion'
-Plugin 'itchyny/lightline.vim'
+Plugin 'vim-airline/vim-airline'
 Plugin 'kchmck/vim-coffee-script'
 Plugin 'groenewege/vim-less'
 Plugin 'digitaltoad/vim-pug'
