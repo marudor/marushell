@@ -32,6 +32,7 @@ else
   Plugin 'w0rp/ale'
 endif
 Plugin 'editorconfig/editorconfig-vim'
+Plugin 'darfink/vim-plist'
 
 
 set statusline+=%#warningmsg#
