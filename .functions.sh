@@ -45,3 +45,9 @@ function localip(){
 function csvpreview(){
       sed 's/,,/, ,/g;s/,,/, ,/g' "$@" | column -s, -t | less -#2 -N -S
 }
+
+function gcaa() {
+  git add --all
+  git commit -m "$*"
+}
+

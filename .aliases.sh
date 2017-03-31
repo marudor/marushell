@@ -12,9 +12,9 @@ alias cp='cp -v'
 
 
 if type gls > /dev/null 2>&1; then
-  alias ls='gls -AFh --color --group-directories-first'
+  alias ls='gls -AFh --group-directories-first ${colorflag}'
 else
-  alias ls='ls -AFhC'
+  alias ls='ls -AFh ${colorflag}'
 fi
 hash gls >/dev/null 2>&1 || alias gls="ls"
 alias lsd='ls -l | grep "^d"' # only directories
