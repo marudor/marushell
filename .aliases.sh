@@ -6,11 +6,6 @@ alias .....="cd ../../../.."
 alias ~="cd ~" # `cd` is probably faster to type though
 alias -- -="cd -"
 
-alias mv='mv -v'
-alias rm='rm -i -v'
-alias cp='cp -v'
-
-
 if type gls > /dev/null 2>&1; then
   alias ls='gls -AFh --group-directories-first ${colorflag}'
 else
