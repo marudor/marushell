@@ -106,6 +106,8 @@ function brewCommandNotFound() {
 
 if type brew > /dev/null; then
   zgen load vasyharan/zsh-brew-services
+  zpath="$(brew --prefix)/etc/profile.d/z.sh"
+  [ -s $zpath ] && source $zpath
 fi
 
 if [[ -f "$HOME/.opam/opam-init/init.zsh" ]]; then
@@ -169,9 +171,6 @@ export NVS_HOME="$HOME/.nvs"
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
-
-zpath="$(brew --prefix)/etc/profile.d/z.sh"
-[ -s $zpath ] && source $zpath
 
 source $HOME/.marushell/.functions.sh
 source $HOME/.marushell/.aliases.sh
