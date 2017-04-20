@@ -6,6 +6,8 @@ call vundle#begin()
 
 
 Plugin 'VundleVim/Vundle.vim'
+Plugin 'othree/yajs.vim'
+Plugin 'HerringtonDarkholme/yats.vim'
 Plugin 'easymotion/vim-easymotion'
 Plugin 'vim-airline/vim-airline'
 Plugin 'kchmck/vim-coffee-script'
@@ -14,7 +16,6 @@ Plugin 'digitaltoad/vim-pug'
 Plugin 'hail2u/vim-css3-syntax'
 Plugin 'tpope/vim-fugitive'
 Plugin 'scrooloose/nerdcommenter'
-Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'nathanaelkane/vim-indent-guides'
