@@ -9,6 +9,8 @@ if type brew > /dev/null; then
   hash gls 2> /dev/null || brew install coreutils
   hash fzf 2> /dev/null || brew install fzf
   hash pv 2> /dev/null || brew install pv
+  hash opam 2> /dev/null || brew install opam
+  hash hub 2> /dev/null || brew install hub
   if ! type mtr 2> /dev/null; then
     brew install mtr
     mtrlocation=$(brew info mtr | grep Cellar | sed -e 's/ (.*//') #  e.g. `/Users/paulirish/.homebrew/Cellar/mtr/0.86`
