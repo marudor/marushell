@@ -113,6 +113,10 @@ if type brew > /dev/null; then
   [ -s $zpath ] && source $zpath
 fi
 
+if type fuck > /dev/null; then
+  eval `thefuck --alias`
+fi
+
 if [[ -f "$HOME/.opam/opam-init/init.zsh" ]]; then
   source "$HOME/.opam/opam-init/init.zsh"
 fi
