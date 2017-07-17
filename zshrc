@@ -17,13 +17,12 @@ setopt hist_verify
 unsetopt inc_append_history
 unsetopt share_history
 
-if type &> /dev/null screens; then
+if type &> /dev/null screen; then
   screen -S updateMarushell -d -m ./.checkForUpdate.sh
 else
   echo "Checking for update in Background. Install screen to supress this message!"
-#  ./.checkForUpdate.sh &> /dev/null &
-  ./.checkForUpdate.sh &
-#  disown
+  ./.checkForUpdate.sh &> /dev/null &
+  disown
 fi
 
 if [ -z "$HISTFILE" ]; then

@@ -15,7 +15,6 @@ else
     status="Diverged"
 fi
 
-echo $status
-if [ $status="up-to-date" ]; then
+if [ $status="update" ]; then
   git pull
 fi
