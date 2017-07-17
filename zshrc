@@ -17,6 +17,15 @@ setopt hist_verify
 unsetopt inc_append_history
 unsetopt share_history
 
+if type &> /dev/null screens; then
+  screen -S updateMarushell -d -m ./.checkForUpdate.sh
+else
+  echo "Checking for update in Background. Install screen to supress this message!"
+#  ./.checkForUpdate.sh &> /dev/null &
+  ./.checkForUpdate.sh &
+#  disown
+fi
+
 if [ -z "$HISTFILE" ]; then
   if [ ! -d $HOME/.history ]; then
     mkdir $HOME/.history
@@ -29,7 +38,7 @@ SAVEHIST=10000
 
 alias grep='grep --color'
 export GREP_COLOR='3;33'
-if type most > /dev/null; then
+if type most &> /dev/null; then
   export PAGER='most'
 fi
 
@@ -80,7 +89,7 @@ if [[ -f "$NVM_DIR/nvm.sh" ]]; then
   export PATH=$PATH:$NVMBASEPATH/$LASTVERSION/bin
 fi
 
-if type hub > /dev/null; then
+if type hub &> /dev/null; then
   alias git="hub"
 fi
 
@@ -88,7 +97,7 @@ if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
   source $HOME/.nix-profile/etc/profile.d/nix.sh; 
 fi
 
-if type nix-env > /dev/null; then
+if type nix-env &> /dev/null; then
   nixUpdate() { nix-env -u --keep-going --leq }
   nix?(){ nix-env -qa \* -P | fgrep -i "$1"; }
 
@@ -99,21 +108,21 @@ if type nix-env > /dev/null; then
 fi
 
 function brewCommandNotFound() {
-  if type brew > /dev/null; then
-    if ! brew command command-not-found-init > /dev/null; then
+  if type brew &> /dev/null; then
+    if ! brew command command-not-found-init &> /dev/null; then
       brew tap homebrew/command-not-found
     fi
     eval "$(brew command-not-found-init)";
   fi
 }
 
-if type brew > /dev/null; then
+if type brew &> /dev/null; then
   zgen load vasyharan/zsh-brew-services
   zpath="$(brew --prefix)/etc/profile.d/z.sh"
   [ -s $zpath ] && source $zpath
 fi
 
-if type fuck > /dev/null; then
+if type fuck &> /dev/null; then
   eval `thefuck --alias`
 fi
 
@@ -125,7 +134,7 @@ if [[ -f "$HOME/.profile" ]] then
   source "$HOME/.profile"
 fi
 
-if type opam > /dev/null; then
+if type opam &> /dev/null; then
   eval `opam config env`
 fi
 
