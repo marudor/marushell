@@ -25,6 +25,9 @@ else
   disown
 fi
 
+autoload -Uz compinit && \
+   compinit -C
+
 if [ -z "$HISTFILE" ]; then
   if [ ! -d $HOME/.history ]; then
     mkdir $HOME/.history
@@ -62,6 +65,7 @@ if ! zgen saved; then
   zgen oh-my-zsh lib/theme-and-appearance.zsh
   zgen oh-my-zsh lib/termsupport.zsh
   zgen oh-my-zsh plugins/sudo
+  zgen oh-my-zsh plugins/git
   zgen load bhilburn/powerlevel9k powerlevel9k
   zgen load horosgrisa/autoenv
   zgen load caarlos0/zsh-pg
