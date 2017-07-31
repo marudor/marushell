@@ -17,7 +17,7 @@ setopt hist_verify
 unsetopt inc_append_history
 unsetopt share_history
 
-if type &> /dev/null screen; then
+if type screen > /dev/null 2>&1; then
   screen -S updateMarushell -d -m ./.checkForUpdate.sh
 else
   echo "Checking for update in Background. Install screen to supress this message!"
@@ -92,7 +92,7 @@ if [[ -f "$NVM_DIR/nvm.sh" ]]; then
   export PATH=$PATH:$NVMBASEPATH/$LASTVERSION/bin
 fi
 
-if command hub > /dev/null 2>&1; then
+if type hub > /dev/null 2>&1; then
   alias git="hub"
 fi
 
@@ -100,7 +100,7 @@ if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
   source $HOME/.nix-profile/etc/profile.d/nix.sh; 
 fi
 
-if command nix-env > /dev/null 2>&1; then
+if type nix-env > /dev/null 2>&1; then
   nixUpdate() { nix-env -u --keep-going --leq }
   nix?(){ nix-env -qa \* -P | fgrep -i "$1"; }
 
@@ -111,7 +111,7 @@ if command nix-env > /dev/null 2>&1; then
 fi
 
 function brewCommandNotFound() {
-  if command brew > /dev/null 2>&1; then
+  if type brew > /dev/null 2>&1; then
     if ! brew command command-not-found-init &> /dev/null; then
       brew tap homebrew/command-not-found
     fi
@@ -119,13 +119,13 @@ function brewCommandNotFound() {
   fi
 }
 
-if command brew > /dev/null 2>&1; then
+if type brew > /dev/null 2>&1; then
   zgen load vasyharan/zsh-brew-services
   zpath="$(brew --prefix)/etc/profile.d/z.sh"
   [ -s $zpath ] && source $zpath
 fi
 
-if command fuck > /dev/null 2>&1; then
+if type fuck > /dev/null 2>&1; then
   eval `thefuck --alias`
 fi
 
@@ -137,7 +137,7 @@ if [[ -f "$HOME/.profile" ]] then
   source "$HOME/.profile"
 fi
 
-if command opam > /dev/null 2>&1; then
+if type opam > /dev/null 2>&1; then
   eval `opam config env`
 fi
 
