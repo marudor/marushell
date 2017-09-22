@@ -51,3 +51,20 @@ function gcaa() {
   git commit -m "$*"
 }
 
+
+function gcf()  { git checkout "feature/$1"; }
+function gffs() { git flow feature start "$1"; }
+function gfff() { git flow feature finish -F "$(git_flow_current_branch)"; }
+
+
+function gch()  { git checkout "hotfix/$1"; }
+function gfhs() { git flow hotfix start "$1"; }
+function gfhf() { git fetch --tags; git pull origin master; git flow hotfix finish -F "$(git_flow_current_branch)"; }
+
+function gcr()  { git checkout "release/$1";  }
+function gfrs() { git flow release start "$1"; }
+function gfrf() { git flow release finish -F "$(git_flow_current_branch)"; }
+
+function git_flow_current_branch(){ git rev-parse --abbrev-ref HEAD | cut -d'/' -f 2; }
+
+
