@@ -28,7 +28,7 @@ cdf() {  # short for cdfinder
 }
 
 cp_p () {
-  rsync -WavP --human-readable --progress $1 $2
+  rsync -WavP --human-readable --progress "$1" "$2"
 }
 
 function localip(){
@@ -52,16 +52,25 @@ function gcaa() {
 }
 
 
-function gcf()  { git checkout "feature/$1"; }
+unalias gcf
+function get_git_flow_prefix() { 
+  prefix=`git config --get gitflow.prefix.$1` 
+  if [[ -n $prefix  ]]; then
+    echo "$prefix";
+  else
+    echo "$1/"
+  fi
+}
+function gcf()  { git checkout "`get_git_flow_prefix feature`$1"; }
 function gffs() { git flow feature start "$1"; }
 function gfff() { git flow feature finish -F "$(git_flow_current_branch)"; }
 
 
-function gch()  { git checkout "hotfix/$1"; }
+function gch()  { git checkout "`get_git_flow_prefix hotfix`$1"; }
 function gfhs() { git flow hotfix start "$1"; }
 function gfhf() { git fetch --tags; git pull origin master; git flow hotfix finish -F "$(git_flow_current_branch)"; }
 
-function gcr()  { git checkout "release/$1";  }
+function gcr()  { git checkout "`get_git_flow_prefix release`$1";  }
 function gfrs() { git flow release start "$1"; }
 function gfrf() { git flow release finish -F "$(git_flow_current_branch)"; }
 
