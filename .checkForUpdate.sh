@@ -1,5 +1,7 @@
 #!/usr/bin/env sh
 
+cd $HOME/.marushell
+
 UPSTREAM=${1:-'@{u}'}
 LOCAL=$(git rev-parse @)
 REMOTE=$(git rev-parse "$UPSTREAM")

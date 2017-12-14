@@ -18,10 +18,10 @@ unsetopt inc_append_history
 unsetopt share_history
 
 if which screen > /dev/null 2>&1; then
-  screen -S updateMarushell -d -m ./.checkForUpdate.sh
+  screen -S updateMarushell -d -m $HOME/.marushell/.checkForUpdate.sh
 else
   echo "Checking for update in Background. Install screen to supress this message!"
-  ./.checkForUpdate.sh &> /dev/null &
+  $HOME/.marushell/.checkForUpdate.sh &> /dev/null &
   disown
 fi
 
