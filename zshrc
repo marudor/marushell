@@ -68,7 +68,6 @@ if ! zgen saved; then
   zgen oh-my-zsh plugins/git
   zgen load bhilburn/powerlevel9k powerlevel9k
   zgen load horosgrisa/autoenv
-  zgen load caarlos0/zsh-pg
 
 
   zgen load zsh-users/zsh-completions src
@@ -121,8 +120,10 @@ function brewCommandNotFound() {
 
 if type brew > /dev/null 2>&1; then
   zgen load vasyharan/zsh-brew-services
-  zpath="$(brew --prefix)/etc/profile.d/z.sh"
-  [ -s $zpath ] && source $zpath
+fi
+
+if type fasd > /dev/null 2>&1; then
+  eval "$(fasd --init auto)"
 fi
 
 if type fuck > /dev/null 2>&1; then
