@@ -17,7 +17,7 @@ setopt hist_verify
 unsetopt inc_append_history
 unsetopt share_history
 
-if type screen > /dev/null 2>&1; then
+if which screen > /dev/null 2>&1; then
   screen -S updateMarushell -d -m ./.checkForUpdate.sh
 else
   echo "Checking for update in Background. Install screen to supress this message!"
@@ -25,8 +25,7 @@ else
   disown
 fi
 
-autoload -Uz compinit && \
-   compinit -C
+autoload -Uz compinit && compinit -C
 
 if [ -z "$HISTFILE" ]; then
   if [ ! -d $HOME/.history ]; then
@@ -40,7 +39,7 @@ SAVEHIST=10000
 
 alias grep='grep --color'
 export GREP_COLOR='3;33'
-if type most &> /dev/null; then
+if which most &> /dev/null; then
   export PAGER='most'
 fi
 
@@ -56,7 +55,6 @@ if [ -f "$HOME/.themeConfig" ]; then
 fi
 
 source $HOME/.zgen/zgen.zsh
-
 
 if ! zgen saved; then
   zgen oh-my-zsh lib/key-bindings.zsh
@@ -91,7 +89,7 @@ if [[ -f "$NVM_DIR/nvm.sh" ]]; then
   export PATH=$PATH:$NVMBASEPATH/$LASTVERSION/bin
 fi
 
-if type hub > /dev/null 2>&1; then
+if which hub > /dev/null 2>&1; then
   alias git="hub"
 fi
 
@@ -99,7 +97,7 @@ if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
   source $HOME/.nix-profile/etc/profile.d/nix.sh; 
 fi
 
-if type nix-env > /dev/null 2>&1; then
+if which nix-env > /dev/null 2>&1; then
   nixUpdate() { nix-env -u --keep-going --leq }
   nix?(){ nix-env -qa \* -P | fgrep -i "$1"; }
 
@@ -110,7 +108,7 @@ if type nix-env > /dev/null 2>&1; then
 fi
 
 function brewCommandNotFound() {
-  if type brew > /dev/null 2>&1; then
+  if which brew > /dev/null 2>&1; then
     if ! brew command command-not-found-init &> /dev/null; then
       brew tap homebrew/command-not-found
     fi
@@ -118,28 +116,23 @@ function brewCommandNotFound() {
   fi
 }
 
-if type brew > /dev/null 2>&1; then
-  zgen load vasyharan/zsh-brew-services
+# if which brew > /dev/null 2>&1; then
+#   zgen load vasyharan/zsh-brew-services
+# fi
+
+if which fasd > /dev/null 2>&1; then
+  eval "$(fasd --init posix-alias zsh-hook zsh-ccomp zsh-ccomp-install zsh-wcomp zsh-wcomp-install)"
 fi
 
-if type fasd > /dev/null 2>&1; then
-  eval "$(fasd --init auto)"
-fi
-
-if type fuck > /dev/null 2>&1; then
-  eval `thefuck --alias`
-fi
-
-if [[ -f "$HOME/.opam/opam-init/init.zsh" ]]; then
-  source "$HOME/.opam/opam-init/init.zsh"
+if which fuck > /dev/null 2>&1; then
+  fuck() {
+    eval "$(command thefuck --alias)"
+    fuck "$@"
+  }
 fi
 
 if [[ -f "$HOME/.profile" ]] then
   source "$HOME/.profile"
-fi
-
-if type opam > /dev/null 2>&1; then
-  eval `opam config env`
 fi
 
 bindkey -e
@@ -162,6 +155,7 @@ fi
 source $HOME/.marushell/autocomplete/_yarn
 
 [ -f $HOME/.travis/travis.sh ] && source $HOME/.travis/travis.sh
+
 if [[ -f $HOME/.nix-profile/etc/profile.d/nix.sh ]]; then
   source $HOME/.nix-profile/etc/profile.d/nix.sh
   nix?() {
@@ -175,22 +169,20 @@ if [[ -f $HOME/.nix-profile/etc/profile.d/nix.sh ]]; then
   export LDFLAGS="-L$HOME/.nix-profile/lib"
 fi
 
-if [[ "$OSTYPE" == "darwin"* ]]; then
+if [[ "$OSwhich" == "darwin"* ]]; then
   alias service=$HOME/.marushell/service.sh
 fi
 
 export PATH=$PATH:$HOME/.marushell/bin
 
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+[ -f ${HOME}/.iterm2_shell_integration.zsh ] && source ${HOME}/.iterm2_shell_integration.zsh
 
 # added by travis gem
 [ -f $HOME/.travis/travis.sh ] && source $HOME/.travis/travis.sh
 
 export NVS_HOME="$HOME/.nvs"
-[ -s "$NVS_HOME/nvs.sh" ] && . "$NVS_HOME/nvs.sh"
+[ -s "$NVS_HOME/nvs.sh" ] && source "$NVS_HOME/nvs.sh"
 
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
 
 source $HOME/.marushell/.functions.sh
 source $HOME/.marushell/.aliases.sh
@@ -208,4 +200,3 @@ if [ -f "${HOME}/perl5" ]; then
   PERL_MB_OPT="--install_base \"${HOME}/perl5\""; export PERL_MB_OPT;
   PERL_MM_OPT="INSTALL_BASE=${HOME}/perl5"; export PERL_MM_OPT;
 fi
-
