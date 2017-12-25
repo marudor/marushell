@@ -1,6 +1,6 @@
 export TERM="xterm-256color"
-export LANG=en_GB.UTF-8
-export LC_ALL=en_GB.UTF-8
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 
 setopt HIST_REDUCE_BLANKS
 setopt PROMPT_SUBST
@@ -200,3 +200,6 @@ if [ -f "${HOME}/perl5" ]; then
   PERL_MB_OPT="--install_base \"${HOME}/perl5\""; export PERL_MB_OPT;
   PERL_MM_OPT="INSTALL_BASE=${HOME}/perl5"; export PERL_MM_OPT;
 fi
+
+# opam configuration
+test -r /Users/thiesclasen/.opam/opam-init/init.zsh && . /Users/thiesclasen/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
