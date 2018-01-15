@@ -33,7 +33,6 @@ else
   Plugin 'w0rp/ale'
 endif
 Plugin 'editorconfig/editorconfig-vim'
-Plugin 'darfink/vim-plist'
 
 let g:javascript_plugin_flow = 1
 let g:jsx_ext_required = 0
