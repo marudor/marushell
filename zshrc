@@ -184,8 +184,8 @@ export NVS_HOME="$HOME/.nvs"
 [ -s "$NVS_HOME/nvs.sh" ] && source "$NVS_HOME/nvs.sh"
 
 
-source $HOME/.marushell/.functions.sh
 source $HOME/.marushell/.aliases.sh
+source $HOME/.marushell/.functions.sh
 
 if [ -f "${HOME}/perl5" ]; then
   PATH="${HOME}/perl5/bin${PATH:+:${PATH}}"; export PATH;
