@@ -76,7 +76,7 @@ function gfrf() { git flow release finish -F "$(git_flow_current_branch)"; }
 
 function git_flow_current_branch(){ git rev-parse --abbrev-ref HEAD | cut -d'/' -f 2; }
 
-if not which pbcopy > /dev/null 2>&1; then
+if ! which pbcopy > /dev/null 2>&1; then
   function pbcopy() {
     cat | nc -q1 localhost 2224
   }
