@@ -187,12 +187,6 @@ export NVS_HOME="$HOME/.nvs"
 source $HOME/.marushell/.functions.sh
 source $HOME/.marushell/.aliases.sh
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f "${HOME}/google-cloud-sdk/path.zsh.inc" ]; then source "${HOME}/google-cloud-sdk/path.zsh.inc"; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f "${HOME}/google-cloud-sdk/completion.zsh.inc" ]; then source "${HOME}/google-cloud-sdk/completion.zsh.inc"; fi
-
 if [ -f "${HOME}/perl5" ]; then
   PATH="${HOME}/perl5/bin${PATH:+:${PATH}}"; export PATH;
   PERL5LIB="${HOME}/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
@@ -203,3 +197,6 @@ fi
 
 # opam configuration
 test -r /Users/thiesclasen/.opam/opam-init/init.zsh && . /Users/thiesclasen/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
+
+[ -f /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc ] && source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc
+[ -f /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc ] && source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc

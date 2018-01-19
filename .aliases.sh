@@ -67,3 +67,9 @@ alias master="git checkout master"
 if type pygmentize > /dev/null; then
   alias cat='pygmentize -O style=monokai -f console256 -g'
 fi
+
+if type pbcopy > /dev/null; then
+  function pbcopy() {
+    command cat $1 | command pbcopy
+  }
+fi
