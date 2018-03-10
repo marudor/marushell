@@ -67,7 +67,6 @@ if ! zgen saved; then
   zgen load bhilburn/powerlevel9k powerlevel9k
   zgen load horosgrisa/autoenv
 
-
   zgen load zsh-users/zsh-completions src
   zgen load zsh-users/zsh-autosuggestions
   zgen load zsh-users/zsh-syntax-highlighting
@@ -81,12 +80,13 @@ lazy_source () {
 }
 
 
-export NVM_DIR="$HOME/.nvm"
-if [[ -f "$NVM_DIR/nvm.sh" ]]; then
+if [[ -f "$HOME/.nvm/nvm.sh" ]]; then
+  export NVM_DIR="$HOME/.nvm"
   source "$NVM_DIR/nvm.sh" --no-use
-  LASTVERSION=$(nvm_ls | tail -1)
-  NVMBASEPATH=$(nvm_version_dir)
-  export PATH=$PATH:$NVMBASEPATH/$LASTVERSION/bin
+  DEFAULTVER=$(cat "$NVM_DIR/alias/default")
+  ACTUALVER=$(command ls "$NVM_DIR/versions/node" | grep "$DEFAULTVER" | tail -1)
+  NVMBASEPATH="$NVM_DIR/versions/node"
+  export PATH="$PATH:$NVMBASEPATH/$ACTUALVER/bin"
 fi
 
 if which hub > /dev/null 2>&1; then
@@ -180,8 +180,10 @@ export PATH=$PATH:$HOME/.marushell/bin
 # added by travis gem
 [ -f $HOME/.travis/travis.sh ] && source $HOME/.travis/travis.sh
 
-export NVS_HOME="$HOME/.nvs"
-[ -s "$NVS_HOME/nvs.sh" ] && source "$NVS_HOME/nvs.sh"
+if [ -f $HOME/.nvs/nvs.sh ]; then
+  export NVS_HOME="$HOME/.nvs"
+  source "$NVS_HOME/nvs.sh"
+fi
 
 
 source $HOME/.marushell/.aliases.sh
@@ -194,9 +196,6 @@ if [ -f "${HOME}/perl5" ]; then
   PERL_MB_OPT="--install_base \"${HOME}/perl5\""; export PERL_MB_OPT;
   PERL_MM_OPT="INSTALL_BASE=${HOME}/perl5"; export PERL_MM_OPT;
 fi
-
-# opam configuration
-test -r /Users/thiesclasen/.opam/opam-init/init.zsh && . /Users/thiesclasen/.opam/opam-init/init.zsh > /dev/null 2> /dev/null || true
 
 [ -f /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc ] && source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc
 [ -f /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc ] && source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc

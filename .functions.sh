@@ -1,7 +1,6 @@
-#!/bin/bash
 # Create a new directory and enter it
 function md() {
-	mkdir -p "$@" && cd "$@"
+	mkdir -p "$@" && cd "$@" || exit
 }
 
 
@@ -24,22 +23,11 @@ function la(){
 }
 
 cdf() {  # short for cdfinder
-  cd "`osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)'`"
+  cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')" || exit
 }
 
 cp_p () {
   rsync -WavP --human-readable --progress "$1" "$2"
-}
-
-function localip(){
-	function _localip(){ echo "📶  "$(ipconfig getifaddr "$1"); }
-	export -f _localip
-	local purple="\x1B\[35m" reset="\x1B\[m"
-	networksetup -listallhardwareports | \
-		sed -r "s/Hardware Port: (.*)/${purple}\1${reset}/g" | \
-		sed -r "s/Device: (en.*)$/_localip \1/e" | \
-		sed -r "s/Ethernet Address:/📘 /g" | \
-		sed -r "s/(VLAN Configurations)|==*//g"
 }
 
 function csvpreview(){
@@ -54,23 +42,23 @@ function gcaa() {
 
 unalias gcf
 function get_git_flow_prefix() { 
-  prefix=`git config --get gitflow.prefix.$1` 
+  prefix=$(git config --get gitflow.prefix."$1")
   if [[ -n $prefix  ]]; then
     echo "$prefix";
   else
     echo "$1/"
   fi
 }
-function gcf()  { git checkout "`get_git_flow_prefix feature`$1"; }
+function gcf()  { git checkout "$(get_git_flow_prefix feature)$1"; }
 function gffs() { git flow feature start "$1"; }
 function gfff() { git flow feature finish -F "$(git_flow_current_branch)"; }
 
 
-function gch()  { git checkout "`get_git_flow_prefix hotfix`$1"; }
+function gch()  { git checkout "$(get_git_flow_prefix hotfix)$1"; }
 function gfhs() { git flow hotfix start "$1"; }
 function gfhf() { git fetch --tags; git pull origin master; git flow hotfix finish -F "$(git_flow_current_branch)"; }
 
-function gcr()  { git checkout "`get_git_flow_prefix release`$1";  }
+function gcr()  { git checkout "$(get_git_flow_prefix release)$1";  }
 function gfrs() { git flow release start "$1"; }
 function gfrf() { git flow release finish -F "$(git_flow_current_branch)"; }
 

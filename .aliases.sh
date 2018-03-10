@@ -6,15 +6,18 @@ alias .....="cd ../../../.."
 alias ~="cd ~" # `cd` is probably faster to type though
 alias -- -="cd -"
 
-if type gls > /dev/null 2>&1; then
-  alias ls='gls -AFh --group-directories-first ${colorflag}'
+colorflag="-G"
+if gls --color > /dev/null 2>&1; then
+  colorflag="--color"
+fi
+if which gls > /dev/null 2>&1; then
+  alias ls="gls -AFh --group-directories-first ${colorflag}"
 else
-  alias ls='ls -AFh ${colorflag}'
+  alias ls="ls -AFh ${colorflag}"
 fi
 hash gls >/dev/null 2>&1 || alias gls="ls"
 alias lsd='ls -l | grep "^d"' # only directories
 
-if gls --color > /dev/null 2>&1; then colorflag="--color"; else colorflag="-G"; fi;
 export CLICOLOR_FORCE=1
 export CLICOLOR=1
 
@@ -50,11 +53,6 @@ alias update_brew_npm_gem='brew_update; npm install npm -g; npm update -g; sudo 
 
 
 
-function clone() {
-    git clone --depth=1 $1
-    cd $(basename ${1%.*})
-    yarn install
-}
 alias push="git push"
 
 # Undo a `git push`
@@ -64,12 +62,8 @@ alias undopush="git push -f origin HEAD^:master"
 alias gr='[ ! -z `git rev-parse --show-cdup` ] && cd `git rev-parse --show-cdup || pwd`'
 alias master="git checkout master"
 
-if type pygmentize > /dev/null; then
-  alias cat='pygmentize -O style=monokai -f console256 -g'
+if which pygmentize > /dev/null; then
+  alias gcat='pygmentize -O style=monokai -f console256 -g'
 fi
 
-if type pbcopy > /dev/null; then
-  function pbcopy() {
-    command cat $1 | command pbcopy
-  }
-fi
+alias dockerstopall="docker stop \$(docker ps -q)"
