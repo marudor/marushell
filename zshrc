@@ -54,6 +54,8 @@ if [ -f "$HOME/.themeConfig" ]; then
   source $HOME/.themeConfig
 fi
 
+export ZSH_CUSTOM=$HOME/.marushell/custom
+
 source $HOME/.zgen/zgen.zsh
 
 if ! zgen saved; then
@@ -70,6 +72,8 @@ if ! zgen saved; then
   zgen load zsh-users/zsh-completions src
   zgen load zsh-users/zsh-autosuggestions
   zgen load zsh-users/zsh-syntax-highlighting
+
+  zgen load "$ZSH_CUSTOM/plugins/yarn-autocompletions/yarn-autocompletions.plugin.zsh"
 
 
   zgen save
@@ -151,8 +155,6 @@ YARN_DIR="$HOME/.yarn"
 if [[ -f "$YARN_DIR/bin/yarn" ]]; then
   export PATH="$YARN_DIR/bin:$PATH"
 fi
-
-source $HOME/.marushell/autocomplete/_yarn
 
 [ -f $HOME/.travis/travis.sh ] && source $HOME/.travis/travis.sh
 
