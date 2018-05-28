@@ -1,9 +1,4 @@
-# Create a new directory and enter it
-function md() {
-	mkdir -p "$@" && cd "$@" || exit
-}
-
-function cleanGitBranch() {
+cleanGitBranch() {
   git fetch -p
   for branch in `git branch -vv | grep ': gone]' | awk '{print $1}'`; do
     git branch -D $branch;
@@ -11,22 +6,17 @@ function cleanGitBranch() {
 }
 
 
-# find shorthand
-function f() {
-	find . -name "$1" 2>&1 | grep -v 'Permission denied'
-}
-
-# List all files, long format, colorized, permissions in octal
-function la(){
- 	ls -l  "$@" | awk '
-    {
-      k=0;
-      for (i=0;i<=8;i++)
-        k+=((substr($1,i+2,1)~/[rwx]/) *2^(8-i));
-      if (k)
-        printf("%0o ",k);
-      printf(" %9s  %3s %2s %5s  %6s  %s %s %s\n", $3, $6, $7, $8, $5, $9,$10, $11);
-    }'
+gitCommand=$((alias git || echo 'git') | sed 's/git=//')
+unalias git
+git() {
+  if [ "$1" = "push" ]; then
+    read -r -q "response?Did you run tests?! [y|N]"
+    response=${response:l}
+    if [[ ! $response =~ ^(yes|y|j|ja) ]]; then
+      return 1
+    fi
+  fi
+  $gitCommand "$@"
 }
 
 cdf() {  # short for cdfinder
@@ -37,18 +27,18 @@ cp_p () {
   rsync -WavP --human-readable --progress "$1" "$2"
 }
 
-function csvpreview(){
+csvpreview(){
       sed 's/,,/, ,/g;s/,,/, ,/g' "$@" | column -s, -t | less -#2 -N -S
 }
 
-function gcaa() {
+gcaa() {
   git add --all
   git commit -m "$*"
 }
 
 
 unalias gcf
-function get_git_flow_prefix() { 
+get_git_flow_prefix() { 
   prefix=$(git config --get gitflow.prefix."$1")
   if [[ -n $prefix  ]]; then
     echo "$prefix";
@@ -56,23 +46,23 @@ function get_git_flow_prefix() {
     echo "$1/"
   fi
 }
-function gcf()  { git checkout "$(get_git_flow_prefix feature)$1"; }
-function gffs() { git flow feature start "$1"; }
-function gfff() { git flow feature finish -F "$(git_flow_current_branch)"; }
+gcf()  { git checkout "$(get_git_flow_prefix feature)$1"; }
+gffs() { git flow feature start "$1"; }
+gfff() { git flow feature finish -F "$(git_flow_current_branch)"; }
 
 
-function gch()  { git checkout "$(get_git_flow_prefix hotfix)$1"; }
-function gfhs() { git flow hotfix start "$1"; }
-function gfhf() { git fetch --tags; git pull origin master; git flow hotfix finish -F "$(git_flow_current_branch)"; }
+gch()  { git checkout "$(get_git_flow_prefix hotfix)$1"; }
+gfhs() { git flow hotfix start "$1"; }
+gfhf() { git fetch --tags; git pull origin master; git flow hotfix finish -F "$(git_flow_current_branch)"; }
 
-function gcr()  { git checkout "$(get_git_flow_prefix release)$1";  }
-function gfrs() { git flow release start "$1"; }
-function gfrf() { git flow release finish -F "$(git_flow_current_branch)"; }
+gcr()  { git checkout "$(get_git_flow_prefix release)$1";  }
+gfrs() { git flow release start "$1"; }
+gfrf() { git flow release finish -F "$(git_flow_current_branch)"; }
 
-function git_flow_current_branch(){ git rev-parse --abbrev-ref HEAD | cut -d'/' -f 2; }
+git_flow_current_branch(){ git rev-parse --abbrev-ref HEAD | cut -d'/' -f 2; }
 
 if ! which pbcopy > /dev/null 2>&1; then
-  function pbcopy() {
+  pbcopy() {
     cat | nc -q1 localhost 2224
   }
 fi

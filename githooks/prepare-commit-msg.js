@@ -4,7 +4,7 @@ const fs = require('fs');
 const argv = process.argv;
 const commitFilePath = argv[2];
 const branch = argv[3];
-const branchRegex = /(story|task|feature)\/(EV-)?(\d+)$/;
+const branchRegex = /(story|task|feature|bug)\/(EV-)?(\d+)$/;
 const r = branchRegex.exec(branch);
 if (!r || !r[3]) {
   process.exit(0);
