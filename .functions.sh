@@ -6,19 +6,6 @@ cleanGitBranch() {
 }
 
 
-gitCommand=$((alias git || echo 'git') | sed 's/git=//')
-unalias git
-git() {
-  if [ "$1" = "push" ]; then
-    read -r -q "response?Did you run tests?! [y|N]"
-    response=${response:l}
-    if [[ ! $response =~ ^(yes|y|j|ja) ]]; then
-      return 1
-    fi
-  fi
-  $gitCommand "$@"
-}
-
 cdf() {  # short for cdfinder
   cd "$(osascript -e 'tell app "Finder" to POSIX path of (insertion location as alias)')" || exit
 }
