@@ -13,6 +13,7 @@ fi
 if which gls > /dev/null 2>&1; then
   alias ls="gls -AFh --group-directories-first ${colorflag}"
 else
+  colorflag="--color"
   alias ls="ls -AFh ${colorflag}"
 fi
 hash gls >/dev/null 2>&1 || alias gls="ls"
