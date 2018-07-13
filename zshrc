@@ -45,6 +45,10 @@ fi
 
 export EDITOR='vim'
 
+if [[ -f "/etc/profile" ]] then
+    source "/etc/profile"
+  fi
+
 if [[ -f "$HOME/.gh_api_token" ]]; then
   export HOMEBREW_GITHUB_API_TOKEN=$(cat ~/.gh_api_token)
 fi
@@ -185,6 +189,7 @@ export PATH=$PATH:$HOME/.marushell/bin
 if [ -f $HOME/.nvs/nvs.sh ]; then
   export NVS_HOME="$HOME/.nvs"
   source "$NVS_HOME/nvs.sh"
+  nvs auto on
 fi
 
 
@@ -201,3 +206,6 @@ fi
 
 [ -f /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc ] && source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc
 [ -f /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc ] && source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc
+
+# added by travis gem
+[ -f /Users/marudor/.travis/travis.sh ] && source /Users/marudor/.travis/travis.sh
