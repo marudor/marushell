@@ -190,6 +190,7 @@ if [ -f $HOME/.nvs/nvs.sh ]; then
   export NVS_HOME="$HOME/.nvs"
   source "$NVS_HOME/nvs.sh"
   nvs auto on
+  nvs auto
 fi
 
 
