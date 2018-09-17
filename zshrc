@@ -1,3 +1,9 @@
+#!/usr/bin/env bash
+
+if [ ! -z "$PERFCHECK" ]; then
+  zmodload zsh/zprof
+fi
+
 export TERM="xterm-256color"
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
@@ -45,9 +51,9 @@ fi
 
 export EDITOR='vim'
 
-if [[ -f "/etc/profile" ]] then
+if [[ -f "/etc/profile" ]]; then
     source "/etc/profile"
-  fi
+fi
 
 if [[ -f "$HOME/.gh_api_token" ]]; then
   export HOMEBREW_GITHUB_API_TOKEN=$(cat ~/.gh_api_token)
@@ -63,7 +69,7 @@ export ZSH_CUSTOM=$HOME/.marushell/custom
 source $HOME/.zgen/zgen.zsh
 
 if ! zgen saved; then
-  zgen oh-my-zsh lib/key-bindings.zsh
+  zgen oh-my-zsh lib/key-bindings.zshpre
   zgen oh-my-zsh lib/completion.zsh
   zgen oh-my-zsh lib/directories.zsh
   zgen oh-my-zsh lib/theme-and-appearance.zsh
@@ -87,32 +93,12 @@ lazy_source () {
   eval "$1 () { [ -f $2 ] && source $2 && $1 \$@ }"
 }
 
-
-if [[ -f "$HOME/.nvm/nvm.sh" ]]; then
-  export NVM_DIR="$HOME/.nvm"
-  source "$NVM_DIR/nvm.sh" --no-use
-  DEFAULTVER=$(cat "$NVM_DIR/alias/default")
-  ACTUALVER=$(command ls "$NVM_DIR/versions/node" | grep "$DEFAULTVER" | tail -1)
-  NVMBASEPATH="$NVM_DIR/versions/node"
-  export PATH="$PATH:$NVMBASEPATH/$ACTUALVER/bin"
-fi
-
 if which hub > /dev/null 2>&1; then
   alias git="hub"
 fi
 
 if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
-  source $HOME/.nix-profile/etc/profile.d/nix.sh; 
-fi
-
-if which nix-env > /dev/null 2>&1; then
-  nixUpdate() { nix-env -u --keep-going --leq }
-  nix?(){ nix-env -qa \* -P | fgrep -i "$1"; }
-
-  export CPATH=$HOME/.nix-profile/include
-  export LIBRARY_PATH=$HOME/.nix-profile/lib
-  export CPPFLAGS='-I$HOME/.nix-profile/include'
-  export LDFLAGS='-L$HOME/.nix-profile/lib'
+  source $HOME/.nix-profile/etc/profile.d/nix.sh;
 fi
 
 function brewCommandNotFound() {
@@ -139,7 +125,7 @@ if which fuck > /dev/null 2>&1; then
   }
 fi
 
-if [[ -f "$HOME/.profile" ]] then
+if [[ -f "$HOME/.profile" ]]; then
   source "$HOME/.profile"
 fi
 
@@ -165,7 +151,7 @@ fi
 if [[ -f $HOME/.nix-profile/etc/profile.d/nix.sh ]]; then
   source $HOME/.nix-profile/etc/profile.d/nix.sh
   nix?() {
-    nix-env -qa \* -P | fgrep -i "$1"; 
+    nix-env -qa \* -P | fgrep -i "$1";
   }
   export CPATH=$HOME/.nix-profile/include
   export LIBRARY_PATH=$HOME/.nix-profile/lib
@@ -189,13 +175,43 @@ export PATH=$PATH:$HOME/.marushell/bin
 if [ -f $HOME/.nvs/nvs.sh ]; then
   export NVS_HOME="$HOME/.nvs"
   source "$NVS_HOME/nvs.sh"
-  nvs auto on
   nvs auto
 fi
 
 
 source $HOME/.marushell/.aliases.sh
 source $HOME/.marushell/.functions.sh
+
+if [[ -f "$HOME/.nvm/nvm.sh" ]]; then
+  export NVM_DIR="$HOME/.nvm"
+  source "$NVM_DIR/nvm.sh" --no-use
+  DEFAULTVER=$(cat "$NVM_DIR/alias/default")
+  ACTUALVER=$(command ls "$NVM_DIR/versions/node" | grep "$DEFAULTVER" | tail -1)
+  NVMBASEPATH="$NVM_DIR/versions/node"
+  export PATH="$PATH:$NVMBASEPATH/$ACTUALVER/bin"
+
+
+  autoload -U add-zsh-hook
+  load-nvmrc() {
+    local node_version="$(nvm version)"
+    local nvmrc_path="$(nvm_find_nvmrc)"
+
+    if [ -n "$nvmrc_path" ]; then
+      local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
+
+      if [ "$nvmrc_node_version" = "N/A" ]; then
+        nvm install
+      elif [ "$nvmrc_node_version" != "$node_version" ]; then
+        nvm use
+      fi
+    elif [ "$node_version" != "$(nvm version default)" ]; then
+      echo "Reverting to nvm default version"
+      nvm use default
+    fi
+  }
+  add-zsh-hook chpwd load-nvmrc
+  load-nvmrc
+fi
 
 if [ -f "${HOME}/perl5" ]; then
   PATH="${HOME}/perl5/bin${PATH:+:${PATH}}"; export PATH;
@@ -210,3 +226,16 @@ fi
 
 # added by travis gem
 [ -f /Users/marudor/.travis/travis.sh ] && source /Users/marudor/.travis/travis.sh
+
+if [[ -s "$HOME/n" ]]; then
+  export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
+fi
+
+if [[ -s "$HOME/.nodebrew" ]]; then
+  export PATH=$HOME/.nodebrew/current/bin:$PATH
+fi
+[[ -s "$HOME/.avn/bin/avn.sh" ]] && source "$HOME/.avn/bin/avn.sh" # load avn
+
+if [ ! -z "$PERFCHECK" ]; then
+  zprof
+fi
