@@ -175,7 +175,9 @@ export PATH=$PATH:$HOME/.marushell/bin
 if [ -f $HOME/.nvs/nvs.sh ]; then
   export NVS_HOME="$HOME/.nvs"
   source "$NVS_HOME/nvs.sh"
-  nvs auto
+  nvs auto on
+  # this cd is due to a bug in nvs
+  cd .
 fi
 
 
