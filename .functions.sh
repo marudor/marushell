@@ -54,3 +54,13 @@ if ! which pbcopy > /dev/null 2>&1; then
   }
 fi
 
+if which getent > /dev/null 2>&1; then
+  getIp() {
+    getent hosts "$1" | cut -d" " -f 1
+  }
+
+getHost() {
+  getent hosts "$1" | cut -d" " -f 2
+}
+fi
+
