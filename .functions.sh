@@ -1,7 +1,9 @@
 cleanGitBranch() {
   git fetch -p
-  for branch in `git branch -vv | grep ': gone]' | awk '{print $1}'`; do
-    git branch -D $branch;
+  for branch in $(git branch -vv | grep ': gone]' | awk '{print $1}'); do
+    if [ "*" != "$branch" ]; then
+      git branch -D "$branch";
+    fi
   done
 }
 
@@ -27,6 +29,7 @@ gcaa() {
 unalias gcf
 get_git_flow_prefix() { 
   prefix=$(git config --get gitflow.prefix."$1")
+  # shellcheck disable=2039
   if [[ -n $prefix  ]]; then
     echo "$prefix";
   else
@@ -48,13 +51,13 @@ gfrf() { git flow release finish -F "$(git_flow_current_branch)"; }
 
 git_flow_current_branch(){ git rev-parse --abbrev-ref HEAD | cut -d'/' -f 2; }
 
-if ! which pbcopy > /dev/null 2>&1; then
+if ! command -v pbcopy > /dev/null 2>&1; then
   pbcopy() {
     cat | nc -q1 localhost 2224
   }
 fi
 
-if which getent > /dev/null 2>&1; then
+if command -v getent > /dev/null 2>&1; then
   getIp() {
     getent hosts "$1" | cut -d" " -f 1
   }

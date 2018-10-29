@@ -23,29 +23,29 @@ setopt hist_verify
 unsetopt inc_append_history
 unsetopt share_history
 
-if which screen > /dev/null 2>&1; then
-  screen -S updateMarushell -d -m $HOME/.marushell/.checkForUpdate.sh
+if command -v screen > /dev/null 2>&1; then
+  screen -S updateMarushell -d -m "$HOME/.marushell/.checkForUpdate.sh"
 else
   echo "Checking for update in Background. Install screen to supress this message!"
-  $HOME/.marushell/.checkForUpdate.sh &> /dev/null &
+  "$HOME/.marushell/.checkForUpdate.sh" &> /dev/null &
   disown
 fi
 
 autoload -Uz compinit && compinit -C
 
 if [ -z "$HISTFILE" ]; then
-  if [ ! -d $HOME/.history ]; then
-    mkdir $HOME/.history
+  if [ ! -d "$HOME/.history" ]; then
+    mkdir "$HOME/.history"
   fi
-  HISTFILE=$HOME/.history/.zsh_history_`basename tty`
+  HISTFILE=$HOME/.history/.zsh_history_$(basename tty)
 fi
 
 HISTSIZE=10000
-SAVEHIST=10000
+
 
 alias grep='grep --color'
 export GREP_COLOR='3;33'
-if which most &> /dev/null; then
+if command -v most &> /dev/null; then
   export PAGER='most'
 fi
 
@@ -56,17 +56,21 @@ if [[ -f "/etc/profile" ]]; then
 fi
 
 if [[ -f "$HOME/.gh_api_token" ]]; then
-  export HOMEBREW_GITHUB_API_TOKEN=$(cat ~/.gh_api_token)
+  HOMEBREW_GITHUB_API_TOKEN=$(cat ~/.gh_api_token)
+  export HOMEBREW_GITHUB_API_TOKEN
 fi
 
-source $HOME/.marushell/themeConfig
+# shellcheck disable=1090
+source "$HOME/.marushell/themeConfig"
 if [ -f "$HOME/.themeConfig" ]; then
-  source $HOME/.themeConfig
+  # shellcheck disable=1090
+  source "$HOME/.themeConfig"
 fi
 
 export ZSH_CUSTOM=$HOME/.marushell/custom
 
-source $HOME/.zgen/zgen.zsh
+# shellcheck disable=1090
+source "$HOME/.zgen/zgen.zsh"
 
 if ! zgen saved; then
   zgen oh-my-zsh lib/key-bindings.zshpre
@@ -78,6 +82,9 @@ if ! zgen saved; then
   zgen oh-my-zsh plugins/git
   zgen load bhilburn/powerlevel9k powerlevel9k
   zgen load horosgrisa/autoenv
+  if command -v pipenv > /dev/null 2>&1; then
+    zgen load owenstranathan/pipenv.zsh
+  fi
 
   zgen load zsh-users/zsh-completions src
   zgen load zsh-users/zsh-autosuggestions
@@ -93,16 +100,17 @@ lazy_source () {
   eval "$1 () { [ -f $2 ] && source $2 && $1 \$@ }"
 }
 
-if which hub > /dev/null 2>&1; then
+if command -v hub > /dev/null 2>&1; then
   alias git="hub"
 fi
 
-if [ -e $HOME/.nix-profile/etc/profile.d/nix.sh ]; then
-  source $HOME/.nix-profile/etc/profile.d/nix.sh;
+if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
+  # shellcheck disable=1090
+  source "$HOME/.nix-profile/etc/profile.d/nix.sh";
 fi
 
 function brewCommandNotFound() {
-  if which brew > /dev/null 2>&1; then
+  if command -v brew > /dev/null 2>&1; then
     if ! brew command command-not-found-init &> /dev/null; then
       brew tap homebrew/command-not-found
     fi
@@ -110,15 +118,15 @@ function brewCommandNotFound() {
   fi
 }
 
-# if which brew > /dev/null 2>&1; then
+# if command -v brew > /dev/null 2>&1; then
 #   zgen load vasyharan/zsh-brew-services
 # fi
 
-if which fasd > /dev/null 2>&1; then
+if command -v fasd > /dev/null 2>&1; then
   eval "$(fasd --init posix-alias zsh-hook zsh-ccomp zsh-ccomp-install zsh-wcomp zsh-wcomp-install)"
 fi
 
-if which fuck > /dev/null 2>&1; then
+if command -v fuck > /dev/null 2>&1; then
   fuck() {
     eval "$(command thefuck --alias)"
     fuck "$@"
@@ -126,6 +134,7 @@ if which fuck > /dev/null 2>&1; then
 fi
 
 if [[ -f "$HOME/.profile" ]]; then
+  # shellcheck disable=1090
   source "$HOME/.profile"
 fi
 
@@ -146,12 +155,14 @@ if [[ -f "$YARN_DIR/bin/yarn" ]]; then
   export PATH="$YARN_DIR/bin:$PATH"
 fi
 
-[ -f $HOME/.travis/travis.sh ] && source $HOME/.travis/travis.sh
+# shellcheck disable=1090
+[ -f "$HOME/.travis/travis.sh" ] && source "$HOME/.travis/travis.sh"
 
 if [[ -f $HOME/.nix-profile/etc/profile.d/nix.sh ]]; then
-  source $HOME/.nix-profile/etc/profile.d/nix.sh
+  # shellcheck disable=1090
+  source "$HOME/.nix-profile/etc/profile.d/nix.sh"
   nix?() {
-    nix-env -qa \* -P | fgrep -i "$1";
+    nix-env -qa \* -P | grep -F -i "$1";
   }
   export CPATH=$HOME/.nix-profile/include
   export LIBRARY_PATH=$HOME/.nix-profile/lib
@@ -161,31 +172,33 @@ if [[ -f $HOME/.nix-profile/etc/profile.d/nix.sh ]]; then
   export LDFLAGS="-L$HOME/.nix-profile/lib"
 fi
 
-if [[ "$OSwhich" == "darwin"* ]]; then
-  alias service=$HOME/.marushell/service.sh
-fi
-
 export PATH=$PATH:$HOME/.marushell/bin
 
-[ -f ${HOME}/.iterm2_shell_integration.zsh ] && source ${HOME}/.iterm2_shell_integration.zsh
+# shellcheck disable=1090
+[ -f "${HOME}/.iterm2_shell_integration.zsh" ] && source "${HOME}/.iterm2_shell_integration.zsh"
 
 # added by travis gem
-[ -f $HOME/.travis/travis.sh ] && source $HOME/.travis/travis.sh
+# shellcheck disable=1090
+[ -f "$HOME/.travis/travis.sh" ] && source "$HOME/.travis/travis.sh"
 
-if [ -f $HOME/.nvs/nvs.sh ]; then
+if [ -f "$HOME/.nvs/nvs.sh" ]; then
   export NVS_HOME="$HOME/.nvs"
+  # shellcheck disable=1090
   source "$NVS_HOME/nvs.sh"
   nvs auto on
   # this cd is due to a bug in nvs
-  cd .
+  cd . || return
 fi
 
 
-source $HOME/.marushell/.aliases.sh
-source $HOME/.marushell/.functions.sh
+# shellcheck disable=1090
+source "$HOME/.marushell/.aliases.sh"
+# shellcheck disable=1090
+source "$HOME/.marushell/.functions.sh"
 
 if [[ -f "$HOME/.nvm/nvm.sh" ]]; then
   export NVM_DIR="$HOME/.nvm"
+  # shellcheck disable=1090
   source "$NVM_DIR/nvm.sh" --no-use
   DEFAULTVER=$(cat "$NVM_DIR/alias/default")
   ACTUALVER=$(command ls "$NVM_DIR/versions/node" | grep "$DEFAULTVER" | tail -1)
@@ -236,6 +249,7 @@ fi
 if [[ -s "$HOME/.nodebrew" ]]; then
   export PATH=$HOME/.nodebrew/current/bin:$PATH
 fi
+# shellcheck disable=1090
 [[ -s "$HOME/.avn/bin/avn.sh" ]] && source "$HOME/.avn/bin/avn.sh" # load avn
 
 if [ ! -z "$PERFCHECK" ]; then
