@@ -20,8 +20,8 @@ setopt hist_expire_dups_first
 setopt hist_ignore_dups
 setopt hist_ignore_space
 setopt hist_verify
-unsetopt inc_append_history
-unsetopt share_history
+setopt inc_append_history
+setopt share_history
 
 if command -v screen > /dev/null 2>&1; then
   screen -S updateMarushell -d -m "$HOME/.marushell/.checkForUpdate.sh"
@@ -82,9 +82,6 @@ if ! zgen saved; then
   zgen oh-my-zsh plugins/git
   zgen load bhilburn/powerlevel9k powerlevel9k
   zgen load horosgrisa/autoenv
-  if command -v pipenv > /dev/null 2>&1; then
-    zgen load owenstranathan/pipenv.zsh
-  fi
 
   zgen load zsh-users/zsh-completions src
   zgen load zsh-users/zsh-autosuggestions
