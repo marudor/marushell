@@ -4,9 +4,13 @@ if [ ! -z "$PERFCHECK" ]; then
   zmodload zsh/zprof
 fi
 
-export TERM="xterm-256color"
-export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
+if [ ! -d "$HOME/.history" ]; then
+  mkdir "$HOME/.history"
+fi
+export HISTFILE=$HOME/.history/.zsh_history
+
+HISTSIZE=100000
+SAVEHIST=100000
 
 setopt HIST_REDUCE_BLANKS
 setopt PROMPT_SUBST
@@ -23,6 +27,10 @@ setopt hist_verify
 setopt inc_append_history
 setopt share_history
 
+export TERM="xterm-256color"
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
 if command -v screen > /dev/null 2>&1; then
   screen -S updateMarushell -d -m "$HOME/.marushell/.checkForUpdate.sh"
 else
@@ -32,15 +40,6 @@ else
 fi
 
 autoload -Uz compinit && compinit -C
-
-if [ -z "$HISTFILE" ]; then
-  if [ ! -d "$HOME/.history" ]; then
-    mkdir "$HOME/.history"
-  fi
-  HISTFILE=$HOME/.history/.zsh_history_$(basename tty)
-fi
-
-HISTSIZE=10000
 
 
 alias grep='grep --color'
