@@ -3,8 +3,7 @@
 #VIM
 OLD="$(pwd)"
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-cd $DIR git submodule update --init
-cd $OLD
+mkdir $DIR/vim
 rm -rf $HOME/.vim
 rm $HOME/.vimrc
 ln -s $DIR/vim $HOME/.vim

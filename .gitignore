@@ -1,3 +1,4 @@
 /vimrc~
 *.swp
 /vim/.netrwhist
+vim/bundle
