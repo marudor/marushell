@@ -118,6 +118,9 @@ function brewCommandNotFound() {
 #   zgen load vasyharan/zsh-brew-services
 # fi
 
+# shellcheck disable=1090
+source "$HOME/.marushell/themeOverride"
+
 if command -v fasd > /dev/null 2>&1; then
   eval "$(fasd --init posix-alias zsh-hook zsh-ccomp zsh-ccomp-install zsh-wcomp zsh-wcomp-install)"
 fi
