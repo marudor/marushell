@@ -67,3 +67,11 @@ getHost() {
 }
 fi
 
+
+hashifyAll() {
+    for var in *
+    do
+      hashsum=$(shasum -a 256 "$var" | awk '{print $1}')
+      mv "$var" "$hashsum.jpg"
+    done
+  }
