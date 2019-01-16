@@ -71,7 +71,13 @@ fi
 hashifyAll() {
     for var in *
     do
-      hashsum=$(shasum -a 256 "$var" | awk '{print $1}')
-      mv "$var" "$hashsum.jpg"
+      hashify "$var"
     done
   }
+
+hashify() {
+  hashsum=$(shasum -a 256 "$1" | awk '{print $1}')
+  ext="${1##*.}"
+  mv "$1" "$hashsum.$ext"
+
+}
