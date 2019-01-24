@@ -75,12 +75,17 @@ hashifyAll() {
     done
   }
 
+hashFile() {
+  hashsum=$(shasum -a 256 "$1" | awk '{print $1}')
+  ext="${1##*.}"
+  echo "$hashsum.$ext"
+}
+
 hashify() {
   for var in "$@"
   do
-    hashsum=$(shasum -a 256 "$var" | awk '{print $1}')
-    ext="${var##*.}"
-    mv "$var" "$hashsum.$ext"
+    fileName=$(hashFile "$var")
+    mv "$var" "$fileName"
   done
 
 }
