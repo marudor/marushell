@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+# Check we've got command line arguments
+if [ -z "$*" ] ; then
+    echo "Need to specify ssh options"
+    exit 1
+fi
+
+# Start trying and retrying
+((count = 10000)) 
+while [[ $count -ne 0 ]] ; do
+    ssh "$*"
+    rc=$?
+    if [[ $rc -ne 255 ]] ; then
+        ((count = 1))
+    #else
+        # echo "Connection error; retrying with count= " $count
+    fi
+
+    ((count = count - 1))
+done
+
+# Print a message if we failed
+if [[ $rc -eq 255 ]] ; then
+    echo "Could not connect to $* after 10000 attempts - stopping."
+fi
