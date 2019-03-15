@@ -1,8 +1,10 @@
 #!/bin/sh
 
-COMMIT_MSG_FILE=$1
-COMMIT_SOURCE=$2
-SHA1=$3
-BRANCH=$(git rev-parse --abbrev-ref HEAD)
-BASEDIR=$(dirname $0)
-node "$BASEDIR/prepare-commit-msg.js" "$COMMIT_MSG_FILE" "$BRANCH"
+if command -v node > /dev/null 2>&1; then
+  COMMIT_MSG_FILE=$1
+  COMMIT_SOURCE=$2
+  SHA1=$3
+  BRANCH=$(git rev-parse --abbrev-ref HEAD)
+  BASEDIR=$(dirname $0)
+  node "$BASEDIR/prepare-commit-msg.js" "$COMMIT_MSG_FILE" "$BRANCH"
+fi

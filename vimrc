@@ -36,6 +36,9 @@ Plugin 'editorconfig/editorconfig-vim'
 
 let g:javascript_plugin_flow = 1
 let g:jsx_ext_required = 0
+let g:ale_fix_on_save = 1
+let g:airline_highlighting_cache = 1
+let g:airline_extensions = ['branch', 'ale']
 
 if v:version < 800
   let g:syntastic_always_populate_loc_list = 1
@@ -69,4 +72,5 @@ set shiftwidth=2
 set expandtab
 set tabstop=2
 set softtabstop=2
+
 
