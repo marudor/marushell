@@ -7,6 +7,8 @@ fi
 if [ ! -d "$HOME/.history" ]; then
   mkdir "$HOME/.history"
 fi
+
+fpath=($HOME/.marushell/autocomplete $fpath)
 export HISTFILE=$HOME/.history/.zsh_history
 
 HISTSIZE=100000
@@ -18,6 +20,8 @@ unsetopt MENU_COMPLETE
 setopt AUTO_MENU
 setopt COMPLETE_IN_WORD
 setopt ALWAYS_TO_END
+
+
 setopt append_history
 setopt extended_history
 setopt hist_expire_dups_first
@@ -25,7 +29,7 @@ setopt hist_ignore_dups
 setopt hist_ignore_space
 setopt hist_verify
 setopt inc_append_history
-setopt share_history
+unsetopt share_history
 
 export TERM="xterm-256color"
 export LANG=en_US.UTF-8
@@ -71,8 +75,10 @@ export ZSH_CUSTOM=$HOME/.marushell/custom
 # shellcheck disable=1090
 source "$HOME/.zgen/zgen.zsh"
 
+AUTOENV_FILE_ENTER=.in
+AUTOENV_FILE_LEAVE=.out
+
 if ! zgen saved; then
-  zgen oh-my-zsh lib/key-bindings.zshpre
   zgen oh-my-zsh lib/completion.zsh
   zgen oh-my-zsh lib/directories.zsh
   zgen oh-my-zsh lib/theme-and-appearance.zsh
@@ -80,7 +86,7 @@ if ! zgen saved; then
   zgen oh-my-zsh plugins/sudo
   zgen oh-my-zsh plugins/git
   zgen load bhilburn/powerlevel9k powerlevel9k
-  zgen load horosgrisa/autoenv
+  zgen load Tarrasch/zsh-autoenv
 
   zgen load zsh-users/zsh-completions src
   zgen load zsh-users/zsh-autosuggestions
@@ -185,7 +191,6 @@ if [ -f "$HOME/.nvs/nvs.sh" ]; then
   # shellcheck disable=1090
   source "$NVS_HOME/nvs.sh"
   nvs auto on
-  # this cd is due to a bug in nvs
   cd . || return
 fi
 
@@ -239,7 +244,8 @@ fi
 [ -f /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc ] && source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc
 
 # added by travis gem
-[ -f /Users/marudor/.travis/travis.sh ] && source /Users/marudor/.travis/travis.sh
+[ -f $HOME/.travis/travis.sh ] && source $HOME/.travis/travis.sh
+[ -f $HOME/.gorc ] && source $HOME/.gorc
 
 if [[ -s "$HOME/n" ]]; then
   export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
@@ -257,3 +263,12 @@ fi
 
 export ANDROID_HOME="$HOME/Library/Android/sdk"
 export PATH="${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools"
+
+# Performance issue, once fixed alias
+#if command -v lab > /dev/null 2>&1; then
+#  alias git="lab"
+#fi
+
+if [[ -s "$HOME/perl5/perlbrew/etc/bashrc" ]]; then
+  source $HOME/perl5/perlbrew/etc/bashrc
+fi
