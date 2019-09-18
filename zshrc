@@ -272,3 +272,7 @@ export PATH="${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools"
 if [[ -s "$HOME/perl5/perlbrew/etc/bashrc" ]]; then
   source $HOME/perl5/perlbrew/etc/bashrc
 fi
+
+if command -v rbenv > /dev/null 2>&1; then
+  export PATH="$HOME/.rbenv/shims:$PATH"
+fi
