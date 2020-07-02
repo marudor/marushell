@@ -1,3 +1,10 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 #!/usr/bin/env bash
 
 if [ ! -z "$PERFCHECK" ]; then
@@ -63,13 +70,6 @@ if [[ -f "$HOME/.gh_api_token" ]]; then
   export HOMEBREW_GITHUB_API_TOKEN
 fi
 
-# shellcheck disable=1090
-source "$HOME/.marushell/themeConfig"
-if [ -f "$HOME/.themeConfig" ]; then
-  # shellcheck disable=1090
-  source "$HOME/.themeConfig"
-fi
-
 export ZSH_CUSTOM=$HOME/.marushell/custom
 
 # shellcheck disable=1090
@@ -85,7 +85,7 @@ if ! zgen saved; then
   zgen oh-my-zsh lib/termsupport.zsh
   zgen oh-my-zsh plugins/sudo
   zgen oh-my-zsh plugins/git
-  zgen load bhilburn/powerlevel9k powerlevel9k
+  zgen load romkatv/powerlevel10k powerlevel10k
   zgen load Tarrasch/zsh-autoenv
 
   zgen load zsh-users/zsh-completions src
@@ -123,9 +123,6 @@ function brewCommandNotFound() {
 # if command -v brew > /dev/null 2>&1; then
 #   zgen load vasyharan/zsh-brew-services
 # fi
-
-# shellcheck disable=1090
-source "$HOME/.marushell/themeOverride"
 
 if command -v fasd > /dev/null 2>&1; then
   eval "$(fasd --init posix-alias zsh-hook zsh-ccomp zsh-ccomp-install zsh-wcomp zsh-wcomp-install)"
@@ -276,3 +273,10 @@ fi
 if command -v rbenv > /dev/null 2>&1; then
   export PATH="$HOME/.rbenv/shims:$PATH"
 fi
+
+if command -v helm > /dev/null 2>&1; then
+  source "$HOME/.marushell/.helmrc"
+fi
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f $HOME/.marushell/p10k.zsh ]] || source $HOME/.marushell/p10k.zsh
