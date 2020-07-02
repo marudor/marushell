@@ -19,4 +19,5 @@ fi
 
 if [ $status="update" ]; then
   git pull
+  zgen update
 fi
