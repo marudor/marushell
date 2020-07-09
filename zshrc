@@ -86,7 +86,6 @@ if ! zgen saved; then
   zgen oh-my-zsh plugins/sudo
   zgen oh-my-zsh plugins/git
   zgen load romkatv/powerlevel10k powerlevel10k
-  zgen load Tarrasch/zsh-autoenv
 
   zgen load zsh-users/zsh-completions src
   zgen load zsh-users/zsh-autosuggestions
@@ -202,9 +201,9 @@ if [[ -f "$HOME/.nvm/nvm.sh" ]]; then
   # shellcheck disable=1090
   source "$NVM_DIR/nvm.sh" --no-use
   DEFAULTVER=$(cat "$NVM_DIR/alias/default")
-  ACTUALVER=$(command ls "$NVM_DIR/versions/node" | grep "$DEFAULTVER" | tail -1)
+  ACTUALVER=$(ls "$NVM_DIR/versions/node" | grep "$DEFAULTVER" | tail -1)
   NVMBASEPATH="$NVM_DIR/versions/node"
-  export PATH="$PATH:$NVMBASEPATH/$ACTUALVER/bin"
+  export PATH="$NVMBASEPATH/$ACTUALVER/bin:$PATH"
 
 
   autoload -U add-zsh-hook
@@ -226,7 +225,7 @@ if [[ -f "$HOME/.nvm/nvm.sh" ]]; then
     fi
   }
   add-zsh-hook chpwd load-nvmrc
-  load-nvmrc
+  #load-nvmrc
 fi
 
 if [ -f "${HOME}/perl5" ]; then
@@ -276,6 +275,10 @@ fi
 
 if command -v helm > /dev/null 2>&1; then
   source "$HOME/.marushell/.helmrc"
+fi
+
+if command -v direnv > /dev/null 2>&1; then
+  eval "$(direnv hook zsh)"
 fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.

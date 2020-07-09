@@ -8,7 +8,7 @@ alias -- -="cd -"
 
 colorflag="-G"
 if gls --color > /dev/null 2>&1; then
-  colorflag="--color"
+  colorflag="--color=auto"
 fi
 if which gls > /dev/null 2>&1; then
   alias ls="gls -AFh --group-directories-first ${colorflag}"
