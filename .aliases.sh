@@ -56,12 +56,8 @@ alias update_brew_npm_gem='brew_update; npm install npm -g; npm update -g; sudo 
 
 alias push="git push"
 
-# Undo a `git push`
-alias undopush="git push -f origin HEAD^:master"
-
 # git root
 alias gr='[ ! -z `git rev-parse --show-cdup` ] && cd `git rev-parse --show-cdup || pwd`'
-alias master="git checkout master"
 
 if which pygmentize > /dev/null; then
   alias gcat='pygmentize -O style=monokai -f console256 -g'

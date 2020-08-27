@@ -1,3 +1,13 @@
+unalias gcm
+gcm() {
+  git branch -r | grep -E 'origin/main$'
+if [ $? -eq 0 ]; then
+  git checkout main
+else
+  git checkout master
+fi
+}
+
 cleanGitBranch() {
   git fetch -p
   for branch in $(git branch -vv | grep ': gone]' | awk '{print $1}'); do
@@ -27,7 +37,7 @@ gcaa() {
 
 
 unalias gcf
-get_git_flow_prefix() { 
+get_git_flow_prefix() {
   prefix=$(git config --get gitflow.prefix."$1")
   # shellcheck disable=2039
   if [[ -n $prefix  ]]; then
@@ -43,7 +53,6 @@ gfff() { git flow feature finish -F "$(git_flow_current_branch)"; }
 
 gch()  { git checkout "$(get_git_flow_prefix hotfix)$1"; }
 gfhs() { git flow hotfix start "$1"; }
-gfhf() { git fetch --tags; git pull origin master; git flow hotfix finish -F "$(git_flow_current_branch)"; }
 
 gcr()  { git checkout "$(get_git_flow_prefix release)$1";  }
 gfrs() { git flow release start "$1"; }
