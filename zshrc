@@ -11,12 +11,11 @@ if [ ! -z "$PERFCHECK" ]; then
   zmodload zsh/zprof
 fi
 
+#autoload -Uz compinit && compinit -C
+
 if [ ! -d "$HOME/.history" ]; then
   mkdir "$HOME/.history"
 fi
-
-fpath=($HOME/.marushell/autocomplete $fpath)
-export HISTFILE=$HOME/.history/.zsh_history
 
 HISTSIZE=100000
 SAVEHIST=100000
@@ -52,7 +51,6 @@ fi
 
 autoload -Uz compinit && compinit -C
 
-
 alias grep='grep --color'
 export GREP_COLOR='3;33'
 if command -v most &> /dev/null; then
@@ -73,28 +71,40 @@ fi
 export ZSH_CUSTOM=$HOME/.marushell/custom
 
 # shellcheck disable=1090
-source "$HOME/.zgen/zgen.zsh"
+#source "${HOME}/.zgenom/zgenom.zsh"
+
+zgenom () {
+	source ${HOME}/.zgenom/zgenom.zsh
+	zgenom "$@"
+}
+
 
 AUTOENV_FILE_ENTER=.in
 AUTOENV_FILE_LEAVE=.out
 
-if ! zgen saved; then
-  zgen oh-my-zsh lib/completion.zsh
-  zgen oh-my-zsh lib/directories.zsh
-  zgen oh-my-zsh lib/theme-and-appearance.zsh
-  zgen oh-my-zsh lib/termsupport.zsh
-  zgen oh-my-zsh plugins/sudo
-  zgen oh-my-zsh plugins/git
-  zgen load romkatv/powerlevel10k powerlevel10k
+if [[ ! -s ${HOME}/.zgenom/sources/init.zsh ]]; then
+  zgenom ohmyzsh
 
-  zgen load zsh-users/zsh-completions src
-  zgen load zsh-users/zsh-autosuggestions
-  zgen load zsh-users/zsh-syntax-highlighting
-
-  zgen load "$ZSH_CUSTOM/plugins/yarn-autocompletions/yarn-autocompletions.plugin.zsh"
+  zgenom ohmyzsh plugins/git
+  zgenom ohmyzsh plugins/sudo
+  # Install ohmyzsh osx plugin if on macOS
+  [[ "$(uname -s)" = Darwin ]] && zgenom ohmyzsh plugins/osx
 
 
-  zgen save
+  zgenom load romkatv/powerlevel10k powerlevel10k
+
+  
+  zgenom load zsh-users/zsh-completions src
+  zgenom load zsh-users/zsh-autosuggestions
+  zgenom load zsh-users/zsh-syntax-highlighting
+
+  zgenom load $ZSH_CUSTOM/plugins/yarn-autocompletions/yarn-autocompletions.plugin.zsh
+
+  zgenom save
+
+  zgenom compile "$HOME/.zshrc"
+else
+  source $HOME/.zgenom/sources/init.zsh
 fi
 
 lazy_source () {
@@ -119,10 +129,6 @@ function brewCommandNotFound() {
   fi
 }
 
-# if command -v brew > /dev/null 2>&1; then
-#   zgen load vasyharan/zsh-brew-services
-# fi
-
 if command -v fasd > /dev/null 2>&1; then
   eval "$(fasd --init posix-alias zsh-hook zsh-ccomp zsh-ccomp-install zsh-wcomp zsh-wcomp-install)"
 fi
@@ -134,10 +140,12 @@ if command -v fuck > /dev/null 2>&1; then
   }
 fi
 
+
 if [[ -f "$HOME/.profile" ]]; then
   # shellcheck disable=1090
   source "$HOME/.profile"
 fi
+
 
 bindkey -e
 bindkey "^[[H" beginning-of-line    #fn-left
@@ -155,6 +163,7 @@ YARN_DIR="$HOME/.yarn"
 if [[ -f "$YARN_DIR/bin/yarn" ]]; then
   export PATH="$YARN_DIR/bin:$PATH"
 fi
+
 
 # shellcheck disable=1090
 [ -f "$HOME/.travis/travis.sh" ] && source "$HOME/.travis/travis.sh"
@@ -196,6 +205,7 @@ source "$HOME/.marushell/.aliases.sh"
 # shellcheck disable=1090
 source "$HOME/.marushell/.functions.sh"
 
+
 if [[ -f "$HOME/.nvm/nvm.sh" ]]; then
   export NVM_DIR="$HOME/.nvm"
   # shellcheck disable=1090
@@ -228,6 +238,7 @@ if [[ -f "$HOME/.nvm/nvm.sh" ]]; then
   #load-nvmrc
 fi
 
+
 if [ -f "${HOME}/perl5" ]; then
   PATH="${HOME}/perl5/bin${PATH:+:${PATH}}"; export PATH;
   PERL5LIB="${HOME}/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
@@ -236,16 +247,16 @@ if [ -f "${HOME}/perl5" ]; then
   PERL_MM_OPT="INSTALL_BASE=${HOME}/perl5"; export PERL_MM_OPT;
 fi
 
+
 [ -f /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc ] && source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc
 [ -f /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc ] && source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc
 
-# added by travis gem
-[ -f $HOME/.travis/travis.sh ] && source $HOME/.travis/travis.sh
-[ -f $HOME/.gorc ] && source $HOME/.gorc
+
 
 if [[ -s "$HOME/n" ]]; then
   export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
 fi
+
 
 if [[ -s "$HOME/.nodebrew" ]]; then
   export PATH=$HOME/.nodebrew/current/bin:$PATH
@@ -273,9 +284,6 @@ if command -v rbenv > /dev/null 2>&1; then
   export PATH="$HOME/.rbenv/shims:$PATH"
 fi
 
-if command -v helm > /dev/null 2>&1; then
-  source "$HOME/.marushell/.helmrc"
-fi
 
 if command -v direnv > /dev/null 2>&1; then
   eval "$(direnv hook zsh)"
@@ -283,3 +291,4 @@ fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f $HOME/.marushell/p10k.zsh ]] || source $HOME/.marushell/p10k.zsh
+source $HOME/.marushell/themeConfig

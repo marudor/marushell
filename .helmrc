@@ -100,7 +100,7 @@ __helm_quote() {
 		printf %q "$1"
 	fi
 }
-autoload -U +X bashcompinit && bashcompinit
+autoload -U +X bashcompinit && bashcompinit -C
 # use word boundary patterns for BSD or GNU sed
 LWORD='[[:<:]]'
 RWORD='[[:>:]]'
