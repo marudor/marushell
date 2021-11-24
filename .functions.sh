@@ -1,13 +1,3 @@
-unalias gcm
-gcm() {
-  git branch -r | grep -E 'origin/main$' > /dev/null 2>&1
-if [ $? -eq 0 ]; then
-  git checkout main
-else
-  git checkout master
-fi
-}
-
 cleanGitBranch() {
   git fetch -p
   for branch in $(git branch -vv | grep ': gone]' | awk '{print $1}'); do

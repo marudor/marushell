@@ -35,6 +35,7 @@ setopt hist_ignore_dups
 setopt hist_ignore_space
 setopt hist_verify
 setopt inc_append_history
+setopt no_share_history
 unsetopt share_history
 
 export TERM="xterm-256color"
@@ -87,6 +88,7 @@ if [[ ! -s ${HOME}/.zgenom/sources/init.zsh ]]; then
 
   zgenom ohmyzsh plugins/git
   zgenom ohmyzsh plugins/sudo
+  zgenom ohmyzsh plugins/asdf
   # Install ohmyzsh osx plugin if on macOS
   [[ "$(uname -s)" = Darwin ]] && zgenom ohmyzsh plugins/osx
 
@@ -134,10 +136,11 @@ if command -v fasd > /dev/null 2>&1; then
 fi
 
 if command -v fuck > /dev/null 2>&1; then
-  fuck() {
-    eval "$(command thefuck --alias)"
-    fuck "$@"
-  }
+  eval $(thefuck --alias)
+  #fuck() {
+  #  eval "$(command thefuck --alias)"
+  #  fuck "$@"
+  #}
 fi
 
 
@@ -167,20 +170,6 @@ fi
 
 # shellcheck disable=1090
 [ -f "$HOME/.travis/travis.sh" ] && source "$HOME/.travis/travis.sh"
-
-if [[ -f $HOME/.nix-profile/etc/profile.d/nix.sh ]]; then
-  # shellcheck disable=1090
-  source "$HOME/.nix-profile/etc/profile.d/nix.sh"
-  nix?() {
-    nix-env -qa \* -P | grep -F -i "$1";
-  }
-  export CPATH=$HOME/.nix-profile/include
-  export LIBRARY_PATH=$HOME/.nix-profile/lib
-  export CPPFLAGS="-I$HOME/.nix-profile/include"
-  export CXXFLAGS="-I$HOME/.nix-profile/include"
-  export CFLAGS="-I$HOME/.nix-profile/include"
-  export LDFLAGS="-L$HOME/.nix-profile/lib"
-fi
 
 export PATH=$PATH:$HOME/.marushell/bin
 
@@ -292,3 +281,9 @@ fi
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f $HOME/.marushell/p10k.zsh ]] || source $HOME/.marushell/p10k.zsh
 source $HOME/.marushell/themeConfig
+
+
+setopt no_share_history
+unsetopt share_history
+
+source <(kubectl completion zsh  | grep -v '^autoload .*compinit$')
