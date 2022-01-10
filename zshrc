@@ -90,7 +90,7 @@ if [[ ! -s ${HOME}/.zgenom/sources/init.zsh ]]; then
   zgenom ohmyzsh plugins/sudo
   zgenom ohmyzsh plugins/asdf
   # Install ohmyzsh osx plugin if on macOS
-  [[ "$(uname -s)" = Darwin ]] && zgenom ohmyzsh plugins/osx
+  [[ "$(uname -s)" = Darwin ]] && zgenom ohmyzsh plugins/macos
 
 
   zgenom load romkatv/powerlevel10k powerlevel10k
@@ -278,6 +278,10 @@ if command -v direnv > /dev/null 2>&1; then
   eval "$(direnv hook zsh)"
 fi
 
+if command -v bat > /dev/null 2>&1; then
+  export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+fi
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f $HOME/.marushell/p10k.zsh ]] || source $HOME/.marushell/p10k.zsh
 source $HOME/.marushell/themeConfig
@@ -286,4 +290,7 @@ source $HOME/.marushell/themeConfig
 setopt no_share_history
 unsetopt share_history
 
-source <(kubectl completion zsh  | grep -v '^autoload .*compinit$')
+if command -v kubectl > /dev/null 2>&1; then
+  source <(kubectl completion zsh  | grep -v '^autoload .*compinit$')
+fi
+export PATH=/Users/thiesclasen/.meteor:$PATH
