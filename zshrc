@@ -294,3 +294,4 @@ if command -v kubectl > /dev/null 2>&1; then
   source <(kubectl completion zsh  | grep -v '^autoload .*compinit$')
 fi
 export PATH=/Users/thiesclasen/.meteor:$PATH
+export PATH="/usr/local/opt/ruby/bin:$PATH"
