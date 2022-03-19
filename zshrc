@@ -80,9 +80,6 @@ zgenom () {
 }
 
 
-AUTOENV_FILE_ENTER=.in
-AUTOENV_FILE_LEAVE=.out
-
 if [[ ! -s ${HOME}/.zgenom/sources/init.zsh ]]; then
   zgenom ohmyzsh
 
@@ -100,18 +97,12 @@ if [[ ! -s ${HOME}/.zgenom/sources/init.zsh ]]; then
   zgenom load zsh-users/zsh-autosuggestions
   zgenom load zsh-users/zsh-syntax-highlighting
 
-  zgenom load $ZSH_CUSTOM/plugins/yarn-autocompletions/yarn-autocompletions.plugin.zsh
-
   zgenom save
 
   zgenom compile "$HOME/.zshrc"
 else
   source $HOME/.zgenom/sources/init.zsh
 fi
-
-lazy_source () {
-  eval "$1 () { [ -f $2 ] && source $2 && $1 \$@ }"
-}
 
 if command -v hub > /dev/null 2>&1; then
   alias git="hub"
@@ -132,15 +123,20 @@ function brewCommandNotFound() {
 }
 
 if command -v fasd > /dev/null 2>&1; then
-  eval "$(fasd --init posix-alias zsh-hook zsh-ccomp zsh-ccomp-install zsh-wcomp zsh-wcomp-install)"
+  fasd_cache="$HOME/.fasd-init-zsh"
+  if [ "$(command -v fasd)" -nt "$fasd_cache" -o ! -s "$fasd_cache" ]; then
+    fasd --init posix-alias zsh-hook zsh-ccomp zsh-ccomp-install zsh-wcomp zsh-wcomp-install >| "$fasd_cache"
+  fi
+  source "$fasd_cache"
+  unset fasd_cache
 fi
 
 if command -v fuck > /dev/null 2>&1; then
-  eval $(thefuck --alias)
-  #fuck() {
-  #  eval "$(command thefuck --alias)"
-  #  fuck "$@"
-  #}
+#  eval $(thefuck --alias)
+  fuck() {
+    eval "$(command thefuck --alias)"
+    fuck "$@"
+  }
 fi
 
 
@@ -176,16 +172,12 @@ export PATH=$PATH:$HOME/.marushell/bin
 # shellcheck disable=1090
 [ -f "${HOME}/.iterm2_shell_integration.zsh" ] && source "${HOME}/.iterm2_shell_integration.zsh"
 
-# added by travis gem
-# shellcheck disable=1090
-[ -f "$HOME/.travis/travis.sh" ] && source "$HOME/.travis/travis.sh"
-
 if [ -f "$HOME/.nvs/nvs.sh" ]; then
   export NVS_HOME="$HOME/.nvs"
   # shellcheck disable=1090
   source "$NVS_HOME/nvs.sh"
   nvs auto on
-  cd . || return
+  nvs cd
 fi
 
 
@@ -193,39 +185,6 @@ fi
 source "$HOME/.marushell/.aliases.sh"
 # shellcheck disable=1090
 source "$HOME/.marushell/.functions.sh"
-
-
-if [[ -f "$HOME/.nvm/nvm.sh" ]]; then
-  export NVM_DIR="$HOME/.nvm"
-  # shellcheck disable=1090
-  source "$NVM_DIR/nvm.sh" --no-use
-  DEFAULTVER=$(cat "$NVM_DIR/alias/default")
-  ACTUALVER=$(ls "$NVM_DIR/versions/node" | grep "$DEFAULTVER" | tail -1)
-  NVMBASEPATH="$NVM_DIR/versions/node"
-  export PATH="$NVMBASEPATH/$ACTUALVER/bin:$PATH"
-
-
-  autoload -U add-zsh-hook
-  load-nvmrc() {
-    local node_version="$(nvm version)"
-    local nvmrc_path="$(nvm_find_nvmrc)"
-
-    if [ -n "$nvmrc_path" ]; then
-      local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
-
-      if [ "$nvmrc_node_version" = "N/A" ]; then
-        nvm install
-      elif [ "$nvmrc_node_version" != "$node_version" ]; then
-        nvm use
-      fi
-    elif [ "$node_version" != "$(nvm version default)" ]; then
-      echo "Reverting to nvm default version"
-      nvm use default
-    fi
-  }
-  add-zsh-hook chpwd load-nvmrc
-  #load-nvmrc
-fi
 
 
 if [ -f "${HOME}/perl5" ]; then
@@ -240,18 +199,6 @@ fi
 [ -f /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc ] && source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc
 [ -f /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc ] && source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc
 
-
-
-if [[ -s "$HOME/n" ]]; then
-  export N_PREFIX="$HOME/n"; [[ :$PATH: == *":$N_PREFIX/bin:"* ]] || PATH+=":$N_PREFIX/bin"  # Added by n-install (see http://git.io/n-install-repo).
-fi
-
-
-if [[ -s "$HOME/.nodebrew" ]]; then
-  export PATH=$HOME/.nodebrew/current/bin:$PATH
-fi
-# shellcheck disable=1090
-[[ -s "$HOME/.avn/bin/avn.sh" ]] && source "$HOME/.avn/bin/avn.sh" # load avn
 
 if [ ! -z "$PERFCHECK" ]; then
   zprof
@@ -275,7 +222,12 @@ fi
 
 
 if command -v direnv > /dev/null 2>&1; then
-  eval "$(direnv hook zsh)"
+  direnv_cache="$HOME/.direnv-init-zsh"
+  if [ "$(command -v direnv)" -nt "$direnv_cache" -o ! -s "$direnv_cache" ]; then
+    direnv hook zsh >| "$direnv_cache"
+  fi
+  source "$direnv_cache"
+  unset direnv_cache
 fi
 
 if command -v bat > /dev/null 2>&1; then
@@ -291,7 +243,11 @@ setopt no_share_history
 unsetopt share_history
 
 if command -v kubectl > /dev/null 2>&1; then
-  source <(kubectl completion zsh  | grep -v '^autoload .*compinit$')
+  kubectl_cache="$HOME/.kubectl-completion-init-zsh"
+  if [ "$(command -v kubectl)" -nt "$kubectl_cache" -o ! -s "$kubectl_cache" ]; then
+    kubectl completion zsh  | grep -v '^autoload .*compinit$' >| "$kubectl_cache"
+  fi
+  source $kubectl_cache
+  unset kubectl_cache
 fi
-export PATH=/Users/thiesclasen/.meteor:$PATH
 export PATH="/usr/local/opt/ruby/bin:$PATH"
