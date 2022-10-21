@@ -26,6 +26,7 @@ unsetopt MENU_COMPLETE
 setopt AUTO_MENU
 setopt COMPLETE_IN_WORD
 setopt ALWAYS_TO_END
+setopt REMATCH_PCRE
 
 
 setopt append_history
@@ -50,8 +51,6 @@ else
   disown
 fi
 
-autoload -Uz compinit && compinit -C
-
 alias grep='grep --color'
 export GREP_COLOR='3;33'
 if command -v most &> /dev/null; then
@@ -71,9 +70,6 @@ fi
 
 export ZSH_CUSTOM=$HOME/.marushell/custom
 
-# shellcheck disable=1090
-#source "${HOME}/.zgenom/zgenom.zsh"
-
 zgenom () {
 	source ${HOME}/.zgenom/zgenom.zsh
 	zgenom "$@"
@@ -84,8 +80,8 @@ if [[ ! -s ${HOME}/.zgenom/sources/init.zsh ]]; then
   zgenom ohmyzsh
 
   zgenom ohmyzsh plugins/git
-  zgenom ohmyzsh plugins/sudo
-  zgenom ohmyzsh plugins/asdf
+  #zgenom ohmyzsh plugins/sudo
+  #zgenom ohmyzsh plugins/asdf
   # Install ohmyzsh osx plugin if on macOS
   [[ "$(uname -s)" = Darwin ]] && zgenom ohmyzsh plugins/macos
 
@@ -104,23 +100,21 @@ else
   source $HOME/.zgenom/sources/init.zsh
 fi
 
+python_venv() {
+  MYVENV=./venv
+  # when you cd into a folder that contains $MYVENV
+  [[ -d $MYVENV ]] && source $MYVENV/bin/activate > /dev/null 2>&1
+  # when you cd into a folder that doesn't
+  [[ ! -d $MYVENV ]] && deactivate > /dev/null 2>&1
+}
+autoload -U add-zsh-hook
+add-zsh-hook chpwd python_venv
+
+python_venv
+
 if command -v hub > /dev/null 2>&1; then
   alias git="hub"
 fi
-
-if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
-  # shellcheck disable=1090
-  source "$HOME/.nix-profile/etc/profile.d/nix.sh";
-fi
-
-function brewCommandNotFound() {
-  if command -v brew > /dev/null 2>&1; then
-    if ! brew command command-not-found-init &> /dev/null; then
-      brew tap homebrew/command-not-found
-    fi
-    eval "$(brew command-not-found-init)";
-  fi
-}
 
 if command -v fasd > /dev/null 2>&1; then
   fasd_cache="$HOME/.fasd-init-zsh"
@@ -158,15 +152,6 @@ unsetopt BEEP
 
 alias ducks='du -cks * | sort -rn | head'
 
-YARN_DIR="$HOME/.yarn"
-if [[ -f "$YARN_DIR/bin/yarn" ]]; then
-  export PATH="$YARN_DIR/bin:$PATH"
-fi
-
-
-# shellcheck disable=1090
-[ -f "$HOME/.travis/travis.sh" ] && source "$HOME/.travis/travis.sh"
-
 export PATH=$PATH:$HOME/.marushell/bin
 
 # shellcheck disable=1090
@@ -177,7 +162,9 @@ if [ -f "$HOME/.nvs/nvs.sh" ]; then
   # shellcheck disable=1090
   source "$NVS_HOME/nvs.sh"
   nvs auto on
-  nvs cd
+  if [ -f ".node-version" ] | [ -f ".nvmrc" ]; then
+    nvs cd
+  fi
 fi
 
 
@@ -187,23 +174,6 @@ source "$HOME/.marushell/.aliases.sh"
 source "$HOME/.marushell/.functions.sh"
 
 
-if [ -f "${HOME}/perl5" ]; then
-  PATH="${HOME}/perl5/bin${PATH:+:${PATH}}"; export PATH;
-  PERL5LIB="${HOME}/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
-  PERL_LOCAL_LIB_ROOT="${HOME}/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
-  PERL_MB_OPT="--install_base \"${HOME}/perl5\""; export PERL_MB_OPT;
-  PERL_MM_OPT="INSTALL_BASE=${HOME}/perl5"; export PERL_MM_OPT;
-fi
-
-
-[ -f /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc ] && source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc
-[ -f /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc ] && source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc
-
-
-if [ ! -z "$PERFCHECK" ]; then
-  zprof
-fi
-
 export ANDROID_HOME="$HOME/Library/Android/sdk"
 export PATH="${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools"
 
@@ -211,15 +181,6 @@ export PATH="${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools"
 #if command -v lab > /dev/null 2>&1; then
 #  alias git="lab"
 #fi
-
-if [[ -s "$HOME/perl5/perlbrew/etc/bashrc" ]]; then
-  source $HOME/perl5/perlbrew/etc/bashrc
-fi
-
-if command -v rbenv > /dev/null 2>&1; then
-  export PATH="$HOME/.rbenv/shims:$PATH"
-fi
-
 
 if command -v direnv > /dev/null 2>&1; then
   direnv_cache="$HOME/.direnv-init-zsh"
@@ -250,4 +211,14 @@ if command -v kubectl > /dev/null 2>&1; then
   source $kubectl_cache
   unset kubectl_cache
 fi
+
 export PATH="/usr/local/opt/ruby/bin:$PATH"
+
+if [ ! -z "$PERFCHECK" ]; then
+  zprof
+fi
+
+# pnpm
+export PNPM_HOME="/Users/thiesclasen/Library/pnpm"
+export PATH="$PNPM_HOME:$PATH"
+# pnpm end
