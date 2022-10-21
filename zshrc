@@ -68,8 +68,6 @@ if [[ -f "$HOME/.gh_api_token" ]]; then
   export HOMEBREW_GITHUB_API_TOKEN
 fi
 
-export ZSH_CUSTOM=$HOME/.marushell/custom
-
 zgenom () {
 	source ${HOME}/.zgenom/zgenom.zsh
 	zgenom "$@"
