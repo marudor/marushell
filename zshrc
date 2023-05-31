@@ -43,6 +43,10 @@ export TERM="xterm-256color"
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
+if [[ -f "/opt/homebrew/bin/brew" ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
 if command -v screen > /dev/null 2>&1; then
   screen -S updateMarushell -d -m "$HOME/.marushell/.checkForUpdate.sh"
 else
