@@ -1,4 +1,6 @@
-source ~/.arbeit
+if [[ -f "$HOME/.arbeit" ]]; then
+  source $HOME/.arbeit
+fi
 
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 #typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
