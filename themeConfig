@@ -1,10 +1,12 @@
+source ~/.arbeit
+
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 #typeset -g POWERLEVEL9K_INSTANT_PROMPT=off
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 
 POWERLEVEL9K_SHORTEN_DIR_LENGTH=60
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(os_icon root_indicator context dir vcs virtualenv)
-POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status kubecontext node_version rbenv)
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status kubecontext opensearchcontext node_version rbenv)
 
 
 POWERLEVEL9K_OS_ICON_BACKGROUND="white"

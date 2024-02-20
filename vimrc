@@ -30,7 +30,7 @@ Plugin 'ConradIrwin/vim-bracketed-paste'
 if v:version < 800
   Plugin 'vim-syntastic/syntastic'
 else
-  Plugin 'w0rp/ale'
+  Plugin 'dense-analysis/ale'
 endif
 Plugin 'editorconfig/editorconfig-vim'
 
@@ -72,5 +72,6 @@ set shiftwidth=2
 set expandtab
 set tabstop=2
 set softtabstop=2
+set re=0
 
 

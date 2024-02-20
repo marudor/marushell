@@ -11,8 +11,6 @@ if [ ! -z "$PERFCHECK" ]; then
   zmodload zsh/zprof
 fi
 
-#autoload -Uz compinit && compinit -C
-
 if [ ! -d "$HOME/.history" ]; then
   mkdir "$HOME/.history"
 fi
@@ -57,9 +55,6 @@ fi
 
 alias grep='grep --color'
 export GREP_COLOR='3;33'
-if command -v most &> /dev/null; then
-  export PAGER='most'
-fi
 
 export EDITOR='vim'
 
@@ -135,7 +130,6 @@ if command -v fuck > /dev/null 2>&1; then
   }
 fi
 
-
 if [[ -f "$HOME/.profile" ]]; then
   # shellcheck disable=1090
   source "$HOME/.profile"
@@ -176,9 +170,6 @@ source "$HOME/.marushell/.aliases.sh"
 source "$HOME/.marushell/.functions.sh"
 
 
-export ANDROID_HOME="$HOME/Library/Android/sdk"
-export PATH="${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools"
-
 # Performance issue, once fixed alias
 #if command -v lab > /dev/null 2>&1; then
 #  alias git="lab"
@@ -214,13 +205,14 @@ if command -v kubectl > /dev/null 2>&1; then
   unset kubectl_cache
 fi
 
-export PATH="/usr/local/opt/ruby/bin:$PATH"
+autoload -Uz compinit && compinit -C
 
 if [ ! -z "$PERFCHECK" ]; then
   zprof
 fi
 
-# pnpm
-export PNPM_HOME="/Users/thiesclasen/Library/pnpm"
-export PATH="$PNPM_HOME:$PATH"
-# pnpm end
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+
+# tabtab source for packages
+# uninstall by removing these lines
+[[ -f ~/.config/tabtab/zsh/__tabtab.zsh ]] && . ~/.config/tabtab/zsh/__tabtab.zsh || true
