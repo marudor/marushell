@@ -24,7 +24,7 @@ unsetopt MENU_COMPLETE
 setopt AUTO_MENU
 setopt COMPLETE_IN_WORD
 setopt ALWAYS_TO_END
-setopt REMATCH_PCRE
+# setopt REMATCH_PCRE
 
 
 setopt append_history
@@ -42,6 +42,7 @@ export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
 if [[ -f "/opt/homebrew/bin/brew" ]]; then
+  export HOMEBREW_NO_ENV_HINTS=1
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
@@ -54,9 +55,12 @@ else
 fi
 
 alias grep='grep --color'
-export GREP_COLOR='3;33'
+export GREP_COLOR='mt=3;33'
 
 export EDITOR='vim'
+if [[ "$TERM_PROGRAM" =~ "vscode" ]]; then
+  export EDITOR='code --wait'
+fi
 
 if [[ -f "/etc/profile" ]]; then
     source "/etc/profile"
@@ -85,7 +89,7 @@ if [[ ! -s ${HOME}/.zgenom/sources/init.zsh ]]; then
 
   zgenom load romkatv/powerlevel10k powerlevel10k
 
-  
+
   zgenom load zsh-users/zsh-completions src
   zgenom load zsh-users/zsh-autosuggestions
   zgenom load zsh-users/zsh-syntax-highlighting
@@ -108,19 +112,6 @@ autoload -U add-zsh-hook
 add-zsh-hook chpwd python_venv
 
 python_venv
-
-if command -v hub > /dev/null 2>&1; then
-  alias git="hub"
-fi
-
-if command -v fasd > /dev/null 2>&1; then
-  fasd_cache="$HOME/.fasd-init-zsh"
-  if [ "$(command -v fasd)" -nt "$fasd_cache" -o ! -s "$fasd_cache" ]; then
-    fasd --init posix-alias zsh-hook zsh-ccomp zsh-ccomp-install zsh-wcomp zsh-wcomp-install >| "$fasd_cache"
-  fi
-  source "$fasd_cache"
-  unset fasd_cache
-fi
 
 if command -v fuck > /dev/null 2>&1; then
 #  eval $(thefuck --alias)
