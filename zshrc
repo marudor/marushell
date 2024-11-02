@@ -46,14 +46,6 @@ if [[ -f "/opt/homebrew/bin/brew" ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-if command -v screen > /dev/null 2>&1; then
-  screen -S updateMarushell -d -m "$HOME/.marushell/.checkForUpdate.sh"
-else
-  echo "Checking for update in Background. Install screen to supress this message!"
-  "$HOME/.marushell/.checkForUpdate.sh" &> /dev/null &
-  disown
-fi
-
 alias grep='grep --color'
 export GREP_COLOR='mt=3;33'
 
@@ -100,18 +92,6 @@ if [[ ! -s ${HOME}/.zgenom/sources/init.zsh ]]; then
 else
   source $HOME/.zgenom/sources/init.zsh
 fi
-
-python_venv() {
-  MYVENV=./venv
-  # when you cd into a folder that contains $MYVENV
-  [[ -d $MYVENV ]] && source $MYVENV/bin/activate > /dev/null 2>&1
-  # when you cd into a folder that doesn't
-  [[ ! -d $MYVENV ]] && deactivate > /dev/null 2>&1
-}
-autoload -U add-zsh-hook
-add-zsh-hook chpwd python_venv
-
-python_venv
 
 if command -v fuck > /dev/null 2>&1; then
 #  eval $(thefuck --alias)
