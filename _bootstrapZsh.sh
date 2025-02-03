@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #ZSH Plugins
-git clone https://github.com/jandamm/zgenom.git "${HOME}/.zgenom"
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ln -s "$DIR/zshrc" "$HOME/.zshrc"
+ln -s "$DIR/zimrc" "$HOME/.zimrc"
 
 if type brew > /dev/null 2>&1; then
   brew install kubectl
@@ -11,15 +11,6 @@ if type brew > /dev/null 2>&1; then
   type gls > /dev/null 2>&1 || brew install coreutils
   type fzf > /dev/null 2>&1 || brew install fzf
   type pv > /dev/null 2>&1 || brew install pv
-  type hub > /dev/null 2>&1 || brew install hub
-  type mtr > /dev/null 2>&1 || brew install mtr
-  if ! type mtr > /dev/null 2>&1; then
-    brew install mtr
-    mtrlocation=$(brew info mtr | grep Cellar | sed -e 's/ (.*//') #  e.g. `/Users/paulirish/.homebrew/Cellar/mtr/0.86`
-    sudo chmod 4755 "$mtrlocation/sbin/mtr-packet"
-    sudo chown root "$mtrlocation/sbin/mtr-packet"
-    sudo chmod u+s "$mtrlocation/sbin/mtr-packet"
-  fi
 fi
 
 zsh -ic exit

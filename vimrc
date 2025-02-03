@@ -16,7 +16,6 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'pangloss/vim-javascript'
 Plugin 'mxw/vim-jsx'
-Plugin 'airblade/vim-gitgutter'
 Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'tomasr/molokai'
 Plugin 'shougo/neocomplete.vim'
@@ -71,5 +70,3 @@ set expandtab
 set tabstop=2
 set softtabstop=2
 set re=0
-
-

@@ -1,3 +1,133 @@
+# Start configuration added by Zim install {{{
+#
+# User configuration sourced by interactive shells
+#
+
+# -----------------
+# Zsh configuration
+# -----------------
+
+#
+# History
+#
+
+# Remove older command from the history if a duplicate is to be added.
+setopt HIST_IGNORE_ALL_DUPS
+
+#
+# Input/output
+#
+
+# Set editor default keymap to emacs (`-e`) or vi (`-v`)
+bindkey -e
+
+# Prompt for spelling correction of commands.
+#setopt CORRECT
+
+# Customize spelling correction prompt.
+#SPROMPT='zsh: correct %F{red}%R%f to %F{green}%r%f [nyae]? '
+
+# Remove path separator from WORDCHARS.
+WORDCHARS=${WORDCHARS//[\/]}
+
+# -----------------
+# Zim configuration
+# -----------------
+
+# Use degit instead of git as the default tool to install and update modules.
+# zstyle ':zim:zmodule' use 'degit'
+
+# --------------------
+# Module configuration
+# --------------------
+
+#
+# git
+#
+
+# Set a custom prefix for the generated aliases. The default prefix is 'G'.
+zstyle ':zim:git' aliases-prefix 'g'
+
+#
+# input
+#
+
+# Append `../` to your input for each `.` you type after an initial `..`
+#zstyle ':zim:input' double-dot-expand yes
+
+#
+# termtitle
+#
+
+# Set a custom terminal title format using prompt expansion escape sequences.
+# See http://zsh.sourceforge.net/Doc/Release/Prompt-Expansion.html#Simple-Prompt-Escapes
+# If none is provided, the default '%n@%m: %~' is used.
+#zstyle ':zim:termtitle' format '%1~'
+
+#
+# zsh-autosuggestions
+#
+
+# Disable automatic widget re-binding on each precmd. This can be set when
+# zsh-users/zsh-autosuggestions is the last module in your ~/.zimrc.
+ZSH_AUTOSUGGEST_MANUAL_REBIND=1
+
+# Customize the style that the suggestions are shown with.
+# See https://github.com/zsh-users/zsh-autosuggestions/blob/master/README.md#suggestion-highlight-style
+#ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=242'
+
+#
+# zsh-syntax-highlighting
+#
+
+# Set what highlighters will be used.
+# See https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters.md
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
+
+# Customize the main highlighter styles.
+# See https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters/main.md#how-to-tweak-it
+#typeset -A ZSH_HIGHLIGHT_STYLES
+#ZSH_HIGHLIGHT_STYLES[comment]='fg=242'
+
+# ------------------
+# Initialize modules
+# ------------------
+
+ZIM_HOME=${ZDOTDIR:-${HOME}}/.zim
+# Download zimfw plugin manager if missing.
+if [[ ! -e ${ZIM_HOME}/zimfw.zsh ]]; then
+  if (( ${+commands[curl]} )); then
+    curl -fsSL --create-dirs -o ${ZIM_HOME}/zimfw.zsh \
+        https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+  else
+    mkdir -p ${ZIM_HOME} && wget -nv -O ${ZIM_HOME}/zimfw.zsh \
+        https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+  fi
+fi
+# Install missing modules, and update ${ZIM_HOME}/init.zsh if missing or outdated.
+if [[ ! ${ZIM_HOME}/init.zsh -nt ${ZIM_CONFIG_FILE:-${ZDOTDIR:-${HOME}}/.zimrc} ]]; then
+  source ${ZIM_HOME}/zimfw.zsh init -q
+fi
+# Initialize modules.
+source ${ZIM_HOME}/init.zsh
+
+# ------------------------------
+# Post-init module configuration
+# ------------------------------
+
+#
+# zsh-history-substring-search
+#
+
+zmodload -F zsh/terminfo +p:terminfo
+# Bind ^[[A/^[[B manually so up/down works both before and after zle-line-init
+for key ('^[[A' '^P' ${terminfo[kcuu1]}) bindkey ${key} history-substring-search-up
+for key ('^[[B' '^N' ${terminfo[kcud1]}) bindkey ${key} history-substring-search-down
+for key ('k') bindkey -M vicmd ${key} history-substring-search-up
+for key ('j') bindkey -M vicmd ${key} history-substring-search-down
+unset key
+# }}} End configuration added by Zim install
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -5,41 +135,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-#!/usr/bin/env bash
-
-if [ ! -z "$PERFCHECK" ]; then
-  zmodload zsh/zprof
-fi
-
-if [ ! -d "$HOME/.history" ]; then
-  mkdir "$HOME/.history"
-fi
-
-HISTSIZE=100000
-SAVEHIST=100000
-
-setopt HIST_REDUCE_BLANKS
-setopt PROMPT_SUBST
-unsetopt MENU_COMPLETE
-setopt AUTO_MENU
-setopt COMPLETE_IN_WORD
-setopt ALWAYS_TO_END
-# setopt REMATCH_PCRE
-
-
-setopt append_history
-setopt extended_history
-setopt hist_expire_dups_first
-setopt hist_ignore_dups
-setopt hist_ignore_space
-setopt hist_verify
-setopt inc_append_history
-setopt no_share_history
-unsetopt share_history
-
-export TERM="xterm-256color"
-export LANG=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
 
 if [[ -f "/opt/homebrew/bin/brew" ]]; then
   export HOMEBREW_NO_ENV_HINTS=1
@@ -47,11 +142,14 @@ if [[ -f "/opt/homebrew/bin/brew" ]]; then
 fi
 
 alias grep='grep --color'
-export GREP_COLOR='mt=3;33'
+ [[ "$(uname -s)" != Darwin ]] && export GREP_COLOR='mt=3;33'
 
 export EDITOR='vim'
 if [[ "$TERM_PROGRAM" =~ "vscode" ]]; then
   export EDITOR='code --wait'
+fi
+if [[ "$TERM_PROGRAM" =~ "zed" ]]; then
+  export EDITOR='zed --wait'
 fi
 
 if [[ -f "/etc/profile" ]]; then
@@ -63,38 +161,8 @@ if [[ -f "$HOME/.gh_api_token" ]]; then
   export HOMEBREW_GITHUB_API_TOKEN
 fi
 
-zgenom () {
-	source ${HOME}/.zgenom/zgenom.zsh
-	zgenom "$@"
-}
-
-
-if [[ ! -s ${HOME}/.zgenom/sources/init.zsh ]]; then
-  zgenom ohmyzsh
-
-  zgenom ohmyzsh plugins/git
-  #zgenom ohmyzsh plugins/sudo
-  #zgenom ohmyzsh plugins/asdf
-  # Install ohmyzsh osx plugin if on macOS
-  [[ "$(uname -s)" = Darwin ]] && zgenom ohmyzsh plugins/macos
-
-
-  zgenom load romkatv/powerlevel10k powerlevel10k
-
-
-  zgenom load zsh-users/zsh-completions src
-  zgenom load zsh-users/zsh-autosuggestions
-  zgenom load zsh-users/zsh-syntax-highlighting
-
-  zgenom save
-
-  zgenom compile "$HOME/.zshrc"
-else
-  source $HOME/.zgenom/sources/init.zsh
-fi
 
 if command -v fuck > /dev/null 2>&1; then
-#  eval $(thefuck --alias)
   fuck() {
     eval "$(command thefuck --alias)"
     fuck "$@"
@@ -107,13 +175,8 @@ if [[ -f "$HOME/.profile" ]]; then
 fi
 
 
-bindkey -e
-bindkey "^[[H" beginning-of-line    #fn-left
-bindkey "^[[F" end-of-line          #fn-right
 bindkey "^[[1;2D" backward-word      #shift-left
 bindkey "^[[1;2C" forward-word       #shift-right
-
-ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=reset-prompt
 
 unsetopt BEEP
 
@@ -139,6 +202,10 @@ fi
 source "$HOME/.marushell/.aliases.sh"
 # shellcheck disable=1090
 source "$HOME/.marushell/.functions.sh"
+
+if command -v hub > /dev/null 2>&1; then
+ alias git="hub"
+fi
 
 
 # Performance issue, once fixed alias
@@ -176,14 +243,6 @@ if command -v kubectl > /dev/null 2>&1; then
   unset kubectl_cache
 fi
 
-autoload -Uz compinit && compinit -C
-
 if [ ! -z "$PERFCHECK" ]; then
   zprof
 fi
-
-export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
-
-# tabtab source for packages
-# uninstall by removing these lines
-[[ -f ~/.config/tabtab/zsh/__tabtab.zsh ]] && . ~/.config/tabtab/zsh/__tabtab.zsh || true
