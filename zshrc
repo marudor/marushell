@@ -174,7 +174,6 @@ if [[ -f "$HOME/.profile" ]]; then
   source "$HOME/.profile"
 fi
 
-
 bindkey "^[[1;2D" backward-word      #shift-left
 bindkey "^[[1;2C" forward-word       #shift-right
 
@@ -246,3 +245,4 @@ fi
 if [ ! -z "$PERFCHECK" ]; then
   zprof
 fi
+
