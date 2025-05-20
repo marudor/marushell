@@ -55,4 +55,4 @@ zmodule zsh-users/zsh-autosuggestions
 # }}} End configuration added by Zim install
 
 zmodule romkatv/powerlevel10k --use degit
-zmodule git@github.com:g-plane/pnpm-shell-completion.git --on-pull './zplug.zsh'
+zmoduel https://github.com/g-plane/pnpm-shell-completion.git --on-pull './zplug.zsh'
