@@ -56,3 +56,5 @@ zmodule zsh-users/zsh-autosuggestions
 
 zmodule romkatv/powerlevel10k --use degit
 zmodule https://github.com/g-plane/pnpm-shell-completion.git --on-pull './zplug.zsh'
+
+zmodule pvenv

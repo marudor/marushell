@@ -1,3 +1,7 @@
+if [ ! -z "$PERFCHECK" ]; then
+  zmodload zsh/zprof
+fi
+
 # Start configuration added by Zim install {{{
 #
 # User configuration sourced by interactive shells
@@ -196,6 +200,12 @@ if [ -f "$HOME/.nvs/nvs.sh" ]; then
   fi
 fi
 
+if command -v fnm > /dev/null 2>&1; then
+  eval "$(fnm env --use-on-cd --version-file-strategy recursive --corepack-enabled --shell zsh)"
+fi
+
+
+
 
 # shellcheck disable=1090
 source "$HOME/.marushell/.aliases.sh"
@@ -242,7 +252,12 @@ if command -v kubectl > /dev/null 2>&1; then
   unset kubectl_cache
 fi
 
+[ -f "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+
+if command -v ngrok &>/dev/null; then
+  eval "$(ngrok completion)"
+fi
+
 if [ ! -z "$PERFCHECK" ]; then
   zprof
 fi
-
