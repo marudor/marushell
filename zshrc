@@ -258,6 +258,20 @@ if command -v ngrok &>/dev/null; then
   eval "$(ngrok completion)"
 fi
 
+if [ -d "$HOME/.proto" ]; then
+  export PROTO_HOME="$HOME/.proto"
+  export PATH="$PROTO_HOME/shims:$PROTO_HOME/bin:$PATH"
+  eval "$(proto activate zsh)"
+fi
+
 if [ ! -z "$PERFCHECK" ]; then
   zprof
 fi
+
+# pnpm
+export PNPM_HOME="/Users/thiesclasen/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
